@@ -42,7 +42,11 @@ The files found under the [*json* directory](./json/) can be copied to the HAROS
 ### Model Extraction and Architectural Analysis
 
 We extracted models of various Kobuki configurations, ranging from individual nodes, such as the safety controller and random walker controller, to full systems, such as the *Safe Random Walker* configuration.
-In particular, we used this configuration in order to evaluate the performance of the HAROS model extractor, using the [Model Graph Extraction Difference plug-in](https://github.com/git-afsantos/haros-plugin-model-ged) (see the [project file](./projects/model-perf.yaml)).
+We then used these models for various purposes, such as evaluation of the model extractor's analysis and architectural analysis using a small catalogue of rules.
+
+#### Model Extraction Performance
+
+We used the *Safe Random Walker* configuration in order to evaluate the performance of the HAROS model extractor with the [Model Graph Extraction Difference plug-in](https://github.com/git-afsantos/haros-plugin-model-ged) (see the [project file](./projects/model-perf.yaml)).
 
 To run this analysis we used the following command.
 
@@ -64,6 +68,12 @@ Overall, we have found that, without specifying extraction hints, HAROS is able 
 | Getter      | 104 | 3   | 0   | 18  | 1   | 0.9630    | 0.8320 | 0.8927   |
 | **Overall** |**613**|**6**|**1**|**69**|**3**|**0.9848** |**0.8904**|**0.9352**|
 
+> **COR** - correct attributes in the extracted model
+> **INC** - incorrect attributes in the extracted model
+> **PAR** - partially correct attributes in the extracted model
+> **MIS** - missing attributes in the extracted model
+> **SPU** - spurious attributes in the extracted model
+
 In this case, we missed the extraction of Links that come from composite primitives, provided by packages other than the base ROS client libraries (not yet included in the parsing capabilities of HAROS).
 For instance, we missed Links (full entities, with multiple attributes) created by the `tf`, `diagnostics` and `dynamic_reconfigure` packages.
 The `dynamic_reconfigure` case, in particular, is a recurrent issue that lowers the metrics considerably, as the use of this package entails at the very least 5 different Links, with a single line of C++ code.
@@ -71,7 +81,7 @@ We also missed subscriptions of the multiplexer node, which are dynamically crea
 Lastly, we missed the default values (attributes) for three parameters that are defined in constants of a C++ implementation file (not a header) that is not part of the analysed source code (i.e., we only consider the binaries of that package).
 All issues are related to C++ parsing; launch file parsing for this configuration was perfect.
 
-In terms of extraction hints for this configuration, we ended up fixing 6 entities and creating 11 new entities, as shown in the project file and in the following snippet.
+In terms of extraction hints for this configuration, we ended up fixing 6 entities and creating 11 new entities, as shown in the project file and in the following snippet (excerpt).
 
 ```yaml
 configurations:
@@ -102,20 +112,7 @@ configurations:
                                 line: 81
                                 column: 1
                     getters:
-                        -   parameter: /mobile_base/battery_capacity
-                            default_value: 16.5
-                        -   parameter: /mobile_base/battery_low
-                            default_value: 14.0
-                        -   parameter: /mobile_base/battery_dangerous
-                            default_value: 13.2
-                        -   parameter: /mobile_base/diagnostic_period
-                            create: true
-                            param_type: double
-                            traceability:
-                                package: kobuki_node
-                                file: src/library/kobuki_ros.cpp
-                                line: 81
-                                column: 1
+                        ...
                 /cmd_vel_mux:
                     publishers:
                         -   topic: /cmd_vel_mux/?
@@ -142,69 +139,73 @@ configurations:
                                 line: 96
                                 column: 32
                     subscribers:
-                        -   topic: /cmd_vel_mux/?
-                            original_name: /cmd_vel_mux/safety_controller
-                            conditional: false
-                        -   topic: /cmd_vel_mux/random_walker
-                            create: true
-                            msg_type: geometry_msgs/Twist
-                            queue_size: 10
-                            traceability:
-                                package: yocs_cmd_vel_mux
-                                file: src/cmd_vel_mux_nodelet.cpp
-                                line: 207
-                                column: 11
+                        ...
                     servers:
-                        -   service: /cmd_vel_mux/set_parameters
-                            create: true
-                            srv_type: dynamic_reconfigure/Reconfigure
-                            traceability:
-                                package: yocs_cmd_vel_mux
-                                file: src/cmd_vel_mux_nodelet.cpp
-                                line: 96
-                                column: 32
+                        ...
                     setters:
-                        -   parameter: /cmd_vel_mux/yaml_cfg_file
-                            create: true
-                            param_type: str
-                            traceability:
-                                package: yocs_cmd_vel_mux
-                                file: src/cmd_vel_mux_nodelet.cpp
-                                line: 96
-                                column: 32
-                        -   parameter: /cmd_vel_mux/yaml_cfg_data
-                            create: true
-                            param_type: str
-                            traceability:
-                                package: yocs_cmd_vel_mux
-                                file: src/cmd_vel_mux_nodelet.cpp
-                                line: 96
-                                column: 32
+                        ...
                     getters:
-                        -   parameter: /cmd_vel_mux/yaml_cfg_file
-                            conditional: false
-                        -   parameter: /cmd_vel_mux/yaml_cfg_file
-                            create: true
-                            param_type: str
-                            traceability:
-                                package: yocs_cmd_vel_mux
-                                file: src/cmd_vel_mux_nodelet.cpp
-                                line: 96
-                                column: 32
-                        -   parameter: /cmd_vel_mux/yaml_cfg_data
-                            create: true
-                            param_type: str
-                            traceability:
-                                package: yocs_cmd_vel_mux
-                                file: src/cmd_vel_mux_nodelet.cpp
-                                line: 96
-                                column: 32
+                        ...
 ```
 
 Note that the creation of a single entity via hints fixes multiple missed attributes in the previous table.
 For instance, we can see from the snippet above that we have created 4 Publishers.
 Each Publisher corresponds to 7 attributes, namely `topic`, `msg_type`, `queue_size`, `package`, `file`, `line` and `column`.
 Thus, 4 entities with 7 attributes each, yields the 28 missed Publisher attributes in the initial report.
+
+#### Architectural Queries
+
+In order to test the HAROS [Pyflwor query engine plugin](https://github.com/git-afsantos/haros-plugin-pyflwor), we implemented a small catalogue of queries, based on common practices in ROS development.
+We ran these queries over the previously mentioned *Safe Random Walker* configuration.
+The queries can be found in the [project file](./projects/model-queries.yaml) and ask the following questions.
+
+**Query 1:** *Are global ROS names used?*<br/>
+Global ROS names (names beginning with a slash, e.g., `/laser`) are unaffected by most name resolution rules of ROS.
+This requires additional attention when creating multiple instances of the same Node within a Configuration, as the global names will collide without proper remappings.
+For instance, if two Kobuki robots existed within the same network and they used global names to publish sensor readings, it is likely that each robot would receive sensor data from both.
+This situation leads to additional maintenance effort, thus justifying the query.
+
+**Query 2:** *Are there any conditional publishers or subscribers?*<br/>
+Conditional publishers and subscribers can be easily spotted in the Visualiser graphs (they use dashed lines).
+There is no justification for this query besides these constructs leading to an additional effort in understanding the architecture.
+In many cases, such conditional links stem from loops, where topics are subscribed to from a list parameter, and there is no significantly better alternative.
+
+**Query 3:** *Do message types match on both ends?*<br/>
+There is a type checking system for messages in ROS, but it is only active during runtime.
+When a message type mismatch occurs, a warning is given and messages of the wrong type are discarded.
+This lack of communication often has noticeable effects, but bringing this feedback to compile time is simple with our query system, and is an additional step to reduce development time.
+The query is formulated for topics only, but implementing a similar type checking mechanism for services would be equally simple.
+
+**Query 4:** *Are there any unbounded message queues?*<br/>
+Message queue sizes should be carefully chosen in ROS.
+Avoiding unbounded message queues is a given, as they could use up all the available memory if a node does not process its queue fast enough.
+
+**Query 5:** *Are there any message queues of size 1?*<br/>
+Queues of size 1 are a very particular case with a niche application.
+They are relatively common in practice, but they can easily lead to message loss.
+Whether it is an intended effect should be analysed on a case by case basis.
+For instance, in teleoperation nodes, it could be intentional.
+We want nodes to process the last given command as fast as possible, and we count on the human operator to issue appropriate commands for the current situation.
+This is especially important for emergency stop commands.
+
+**Query 6:** *Are there multiple publishers on a single topic?*<br/>
+In most cases, having multiple publishers on a single topic is unintended, likely due to a missing name remapping.
+For pure data producers, such as sensors, merging multiple publishers under a single topic would likely lead to erroneous behaviour.
+For controllers, a single source of direct commands is also desirable, in order to avoid conflicts.
+This is why a common solution for multiple command sources is to introduce a multiplexer between the controllers and the actuator.
+A valid use of multiple publishers on a single topic would be for sporadic (or high-level) events where the robot has multiple units capable of detecting, or producing, such events.
+
+**Query 7:** *Are there any disconnected topics of the same type, with similar names?*<br/>
+This query is slightly more complex than the others, in terms of implementation, but it shows how the query language allows for some programmatic freedom.
+We used some heuristics based on string comparison of the Topic names of publishers and subscribers, to try and detect those where the message types match, but the names are only slightly different -- e.g., in `/laser` and `/robot/laser` the proper names match, but the namespace prefix does not.
+Many times, this could be an indicator that the developer applied a name remapping on one of the nodes, but forgot to match it in another node, or that they forgot to apply remappings altogether.
+Wrong name remappings are another issue in ROS that can be manually detected during runtime (via inspection), but for which there are no built-in compile-time checks of any kind.
+
+**Query 8:** *Are there any uses of the message type* `std_msgs/Empty`*?*<br/>
+This is a message type that contains no data, and thus should be treated specially.
+It is useful as a trigger for events or actions, but one should consider whether additional data could be of use.
+
+Overall there are 29 query matches, although none seem to be faults in the system.
 
 
 ### Property-based Testing

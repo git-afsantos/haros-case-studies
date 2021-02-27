@@ -68,10 +68,10 @@ Overall, we have found that, without specifying extraction hints, HAROS is able 
 | Getter      | 104 | 3   | 0   | 18  | 1   | 0.9630    | 0.8320 | 0.8927   |
 | **Overall** |**613**|**6**|**1**|**69**|**3**|**0.9848** |**0.8904**|**0.9352**|
 
-> **COR** - correct attributes in the extracted model
-> **INC** - incorrect attributes in the extracted model
-> **PAR** - partially correct attributes in the extracted model
-> **MIS** - missing attributes in the extracted model
+> **COR** - correct attributes in the extracted model<br/>
+> **INC** - incorrect attributes in the extracted model<br/>
+> **PAR** - partially correct attributes in the extracted model<br/>
+> **MIS** - missing attributes in the extracted model<br/>
 > **SPU** - spurious attributes in the extracted model
 
 In this case, we missed the extraction of Links that come from composite primitives, provided by packages other than the base ROS client libraries (not yet included in the parsing capabilities of HAROS).
@@ -159,28 +159,33 @@ In order to test the HAROS [Pyflwor query engine plugin](https://github.com/git-
 We ran these queries over the previously mentioned *Safe Random Walker* configuration.
 The queries can be found in the [project file](./projects/model-queries.yaml) and ask the following questions.
 
-**Query 1:** *Are global ROS names used?*<br/>
+> **Query 1:** *Are global ROS names used?*
+
 Global ROS names (names beginning with a slash, e.g., `/laser`) are unaffected by most name resolution rules of ROS.
 This requires additional attention when creating multiple instances of the same Node within a Configuration, as the global names will collide without proper remappings.
 For instance, if two Kobuki robots existed within the same network and they used global names to publish sensor readings, it is likely that each robot would receive sensor data from both.
 This situation leads to additional maintenance effort, thus justifying the query.
 
-**Query 2:** *Are there any conditional publishers or subscribers?*<br/>
+> **Query 2:** *Are there any conditional publishers or subscribers?*
+
 Conditional publishers and subscribers can be easily spotted in the Visualiser graphs (they use dashed lines).
 There is no justification for this query besides these constructs leading to an additional effort in understanding the architecture.
 In many cases, such conditional links stem from loops, where topics are subscribed to from a list parameter, and there is no significantly better alternative.
 
-**Query 3:** *Do message types match on both ends?*<br/>
+> **Query 3:** *Do message types match on both ends?*
+
 There is a type checking system for messages in ROS, but it is only active during runtime.
 When a message type mismatch occurs, a warning is given and messages of the wrong type are discarded.
 This lack of communication often has noticeable effects, but bringing this feedback to compile time is simple with our query system, and is an additional step to reduce development time.
 The query is formulated for topics only, but implementing a similar type checking mechanism for services would be equally simple.
 
-**Query 4:** *Are there any unbounded message queues?*<br/>
+> **Query 4:** *Are there any unbounded message queues?*
+
 Message queue sizes should be carefully chosen in ROS.
 Avoiding unbounded message queues is a given, as they could use up all the available memory if a node does not process its queue fast enough.
 
-**Query 5:** *Are there any message queues of size 1?*<br/>
+> **Query 5:** *Are there any message queues of size 1?*
+
 Queues of size 1 are a very particular case with a niche application.
 They are relatively common in practice, but they can easily lead to message loss.
 Whether it is an intended effect should be analysed on a case by case basis.
@@ -188,20 +193,23 @@ For instance, in teleoperation nodes, it could be intentional.
 We want nodes to process the last given command as fast as possible, and we count on the human operator to issue appropriate commands for the current situation.
 This is especially important for emergency stop commands.
 
-**Query 6:** *Are there multiple publishers on a single topic?*<br/>
+> **Query 6:** *Are there multiple publishers on a single topic?*
+
 In most cases, having multiple publishers on a single topic is unintended, likely due to a missing name remapping.
 For pure data producers, such as sensors, merging multiple publishers under a single topic would likely lead to erroneous behaviour.
 For controllers, a single source of direct commands is also desirable, in order to avoid conflicts.
 This is why a common solution for multiple command sources is to introduce a multiplexer between the controllers and the actuator.
 A valid use of multiple publishers on a single topic would be for sporadic (or high-level) events where the robot has multiple units capable of detecting, or producing, such events.
 
-**Query 7:** *Are there any disconnected topics of the same type, with similar names?*<br/>
+> **Query 7:** *Are there any disconnected topics of the same type, with similar names?*
+
 This query is slightly more complex than the others, in terms of implementation, but it shows how the query language allows for some programmatic freedom.
 We used some heuristics based on string comparison of the Topic names of publishers and subscribers, to try and detect those where the message types match, but the names are only slightly different -- e.g., in `/laser` and `/robot/laser` the proper names match, but the namespace prefix does not.
 Many times, this could be an indicator that the developer applied a name remapping on one of the nodes, but forgot to match it in another node, or that they forgot to apply remappings altogether.
 Wrong name remappings are another issue in ROS that can be manually detected during runtime (via inspection), but for which there are no built-in compile-time checks of any kind.
 
-**Query 8:** *Are there any uses of the message type `std_msgs/Empty`?*<br/>
+> **Query 8:** *Are there any uses of the message type `std_msgs/Empty`?*
+
 This is a message type that contains no data, and thus should be treated specially.
 It is useful as a trigger for events or actions, but one should consider whether additional data could be of use.
 
@@ -261,6 +269,11 @@ For instance, we are able to calculate:
 #### Artefacts
 
 The [project file](./projects/pbt-eval.yaml) contains all the tested configurations and the full catalogue of properties for each configuration.
+It can be executed with the following command.
+
+```bash
+haros analyse -w haros_plugin_pbt_gen -n -p pbt-eval.yaml
+```
 
 The original Kobuki launch files could not be used directly, as these included hardware-related nodes.
 The modified versions we used (referred to as part of the `hpl_test` package) can be found in the [launch directory](./launch/).
@@ -284,12 +297,12 @@ The axioms are a combination of the same axioms used for the safety controller a
 This SUT also achieved a perfect mutant score, as shown in the following table.
 Out of the 45 killed mutants, only 2 were reported as flaky tests, with one of them being essentially the same property that led to false negatives in the safety controller and random walker controller nodes.
 
-| Metric            | Value      |
-|:---               | :---:      |
-| Mutants           | 45         |
-| Flaky Tests       | 2 (4.444%) |
-| False Negatives   | 0          |
-| Mutant Score      | 1.0        |
+| Metric          | Value |
+|:--------------- | :---: |
+| Mutants         | 45    |
+| Flaky Tests     | 2     |
+| False Negatives | 0     |
+| Mutant Score    | 1.0   |
 
 Regarding other performance criteria, as per the following table, we did not observe anything out of the ordinary.
 The performance metrics seem to be on par with the tests for individual nodes.

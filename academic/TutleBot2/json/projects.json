@@ -1,0 +1,25 @@
+[
+  {
+    "packages":[
+      "kobuki_bumper2pc",
+      "kobuki_safety_controller",
+      "yocs_cmd_vel_mux",
+      "yocs_safety_controller",
+      "yocs_velocity_smoother",
+      "kobuki_keyop",
+      "kobuki_random_walker",
+      "kobuki_node",
+      "turtlebot_bringup",
+      "turtlebot_navigation",
+      "openni2_launch",
+      "openni_launch",
+      "capabilities",
+      "turtlebot_description",
+      "rocon_app_manager",
+      "kobuki_description",
+      "xacro"
+    ],
+    "repositories":[],
+    "id":"Turtlebot Extraction Performance"
+  }
+]

@@ -1,0 +1,2391 @@
+%YAML 1.1
+---
+project: Turtlebot Extraction Performance
+packages:
+    - kobuki_node
+    - kobuki_safety_controller
+    - kobuki_keyop
+    - kobuki_random_walker
+    - kobuki_bumper2pc
+    - yocs_cmd_vel_mux
+    - yocs_velocity_smoother
+    - yocs_safety_controller
+    - turtlebot_bringup
+    - turtlebot_navigation
+configurations:
+    turtlebot_amcl_hints:
+        launch:
+            - turtlebot_bringup/launch/minimal.launch
+            - turtlebot_navigation/launch/amcl_demo.launch
+        user_data:
+            haros_plugin_model_ged:
+                import:
+                    - turtlebot_amcl
+                truth: {}
+        hints:
+            nodes:
+                /mobile_base:
+                    publishers:
+                        -   topic: /tf 
+                            create: true
+                            msg_type: tf2_msgs/TFMessage
+                            queue_size: 100
+                            traceability:
+                                package: kobuki_node
+                                file: src/library/odometry.cpp
+                                line: 31
+                                column: 1
+                        -   topic: /diagnostics 
+                            create: true
+                            msg_type: diagnostic_msgs/DiagnosticArray
+                            queue_size: 1
+                            traceability:
+                                package: kobuki_node
+                                file: src/library/kobuki_ros.cpp
+                                line: 81
+                                column: 1
+                    getters:
+                        -   parameter: /mobile_base/battery_capacity
+                            default_value: 16.5
+                        -   parameter: /mobile_base/battery_low
+                            default_value: 14.0
+                        -   parameter: /mobile_base/battery_dangerous
+                            default_value: 13.2
+                        -   parameter: /mobile_base/diagnostic_period
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: kobuki_node
+                                file: src/library/kobuki_ros.cpp
+                                line: 81
+                                column: 1
+                /cmd_vel_mux:
+                    publishers:
+                        -   topic: /cmd_vel_mux/?
+                            original_name: /cmd_vel_mux/output
+                            conditional: false
+                        -   topic: /cmd_vel_mux/parameter_descriptions 
+                            create: true
+                            msg_type: dynamic_reconfigure/ConfigDescription
+                            queue_size: 1
+                            latched: true
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                        -   topic: /cmd_vel_mux/parameter_updates
+                            create: true
+                            msg_type: dynamic_reconfigure/Config
+                            queue_size: 1
+                            latched: true
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                    subscribers:
+                        -   topic: /cmd_vel_mux/?
+                            original_name: /cmd_vel_mux/input/safety_controller
+                            conditional: false
+                        -   topic: /cmd_vel_mux/input/teleop
+                            create: true
+                            msg_type: geometry_msgs/Twist
+                            queue_size: 10
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 207
+                                column: 11
+                        -   topic: /cmd_vel_mux/input/switch
+                            create: true
+                            msg_type: geometry_msgs/Twist
+                            queue_size: 10
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 207
+                                column: 11
+                        -   topic: /cmd_vel_mux/input/navi
+                            create: true
+                            msg_type: geometry_msgs/Twist
+                            queue_size: 10
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 207
+                                column: 11
+                    servers:
+                        -   service: /cmd_vel_mux/set_parameters
+                            create: true
+                            srv_type: dynamic_reconfigure/Reconfigure
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                    setters:
+                        -   parameter: /cmd_vel_mux/yaml_cfg_file
+                            create: true
+                            param_type: str
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                        -   parameter: /cmd_vel_mux/yaml_cfg_data
+                            create: true
+                            param_type: str
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                    getters:
+                        -   parameter: /cmd_vel_mux/yaml_cfg_file
+                            conditional: false
+                        -   parameter: /cmd_vel_mux/yaml_cfg_file
+                            create: true
+                            param_type: str
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                        -   parameter: /cmd_vel_mux/yaml_cfg_data
+                            create: true
+                            param_type: str
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                /navigation_velocity_smoother:
+                    publishers:
+                        -   topic: /navigation_velocity_smoother/parameter_descriptions 
+                            create: true
+                            msg_type: dynamic_reconfigure/ConfigDescription
+                            queue_size: 1
+                            latched: true
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 279
+                                column: 32
+                        -   topic: /navigation_velocity_smoother/parameter_updates
+                            create: true
+                            msg_type: dynamic_reconfigure/Config
+                            queue_size: 1
+                            latched: true
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 279
+                                column: 32
+                    servers:
+                        -   service: /navigation_velocity_smoother/set_parameters
+                            create: true
+                            srv_type: dynamic_reconfigure/Reconfigure
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 279
+                                column: 32
+                    setters:
+                        -   parameter: /navigation_velocity_smoother/speed_lim_v
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 279
+                                column: 32
+                        -   parameter: /navigation_velocity_smoother/speed_lim_w
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 279
+                                column: 32
+                        -   parameter: /navigation_velocity_smoother/accel_lim_v
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 279
+                                column: 32
+                        -   parameter: /navigation_velocity_smoother/accel_lim_w
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 279
+                                column: 32
+                        -   parameter: /navigation_velocity_smoother/decel_factor
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 279
+                                column: 32
+                    getters:
+                        -   parameter: /navigation_velocity_smoother/speed_lim_v
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 279
+                                column: 32
+                        -   parameter: /navigation_velocity_smoother/speed_lim_w
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 279
+                                column: 32
+                        -   parameter: /navigation_velocity_smoother/accel_lim_v
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 279
+                                column: 32
+                        -   parameter: /navigation_velocity_smoother/accel_lim_w
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 279
+                                column: 32
+                        -   parameter: /navigation_velocity_smoother/decel_factor
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 279
+                                column: 32
+                        -   parameter: /navigation_velocity_smoother/speed_lim_v
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 299
+                                column: 8
+                        -   parameter: /navigation_velocity_smoother/speed_lim_w
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 300
+                                column: 8
+                        -   parameter: /navigation_velocity_smoother/accel_lim_v
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 306
+                                column: 8
+                        -   parameter: /navigation_velocity_smoother/accel_lim_w
+                            create: true
+                            param_type: double
+                            traceability:
+                                package: yocs_velocity_smoother
+                                file: src/velocity_smoother_nodelet.cpp
+                                line: 307
+                                column: 8
+            parameters:
+                /robot_description:
+                    default_value: "<xml></xml>"
+                    param_type: str
+    turtlebot_minimal:
+        launch:
+            - turtlebot_bringup/launch/minimal.launch
+        user_data:
+            haros_plugin_model_ged:
+                truth:
+                    nodes:
+                        /robot_state_publisher:
+                            node_type: robot_state_publisher/robot_state_publisher
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/robot.launch.xml
+                                line: 19
+                                column: 3
+                            # ignore ROS API
+                        /diagnostic_aggregator:
+                            node_type: diagnostic_aggregator/aggregator_node
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/robot.launch.xml
+                                line: 22
+                                column: 3
+                            # ignore ROS API
+                        /mobile_base_nodelet_manager:
+                            node_type: nodelet/nodelet
+                            args: "manager"
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/mobile_base.launch.xml
+                                line: 8
+                                column: 3
+                            # ignore ROS API
+                        /mobile_base:
+                            node_type: kobuki_node/KobukiNodelet
+                            args: "load kobuki_node/KobukiNodelet mobile_base_nodelet_manager"
+                            remaps:
+                                /mobile_base/odom: /odom
+                                /mobile_base/enable: /enable
+                                /mobile_base/disable: /disable
+                                /mobile_base/joint_states: /joint_states
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/kobuki/mobile_base.launch.xml
+                                line: 8
+                                column: 3
+                            publishers:
+                              - topic: /odom
+                                original_name: /mobile_base/odom
+                                msg_type: nav_msgs/Odometry
+                                queue_size: 50
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/odometry.cpp
+                                    line: 76
+                                    column: 20
+                              - topic: /tf
+                                msg_type: tf2_msgs/TFMessage
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/odometry.cpp
+                                    line: 31
+                                    column: 1
+                              - topic: /diagnostics
+                                msg_type: diagnostic_msgs/DiagnosticArray
+                                queue_size: 1
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 81
+                                    column: 1
+                              - topic: /joint_states
+                                original_name: /mobile_base/joint_states
+                                msg_type: sensor_msgs/JointState
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 308
+                                    column: 27
+                              - topic: /mobile_base/version_info
+                                msg_type: kobuki_msgs/VersionInfo
+                                queue_size: 100
+                                latched: true
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 313
+                                    column: 28
+                              - topic: /mobile_base/controller_info
+                                msg_type: kobuki_msgs/ControllerInfo
+                                queue_size: 100
+                                latched: true
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 314
+                                    column: 31
+                              - topic: /mobile_base/events/button
+                                msg_type: kobuki_msgs/ButtonEvent
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 315
+                                    column: 28
+                              - topic: /mobile_base/events/bumper
+                                msg_type: kobuki_msgs/BumperEvent
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 316
+                                    column: 28
+                              - topic: /mobile_base/events/cliff
+                                msg_type: kobuki_msgs/CliffEvent
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 317
+                                    column: 28
+                              - topic: /mobile_base/events/wheel_drop
+                                msg_type: kobuki_msgs/WheelDropEvent
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 318
+                                    column: 28
+                              - topic: /mobile_base/events/power_system
+                                msg_type: kobuki_msgs/PowerSystemEvent
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 319
+                                    column: 28
+                              - topic: /mobile_base/events/digital_input
+                                msg_type: kobuki_msgs/DigitalInputEvent
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 320
+                                    column: 28
+                              - topic: /mobile_base/events/robot_state
+                                msg_type: kobuki_msgs/RobotStateEvent
+                                queue_size: 100
+                                latched: true
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 321
+                                    column: 28
+                              - topic: /mobile_base/sensors/core
+                                msg_type: kobuki_msgs/SensorState
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 322
+                                    column: 28
+                              - topic: /mobile_base/sensors/dock_ir
+                                msg_type: kobuki_msgs/DockInfraRed
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 323
+                                    column: 23
+                              - topic: /mobile_base/sensors/imu_data
+                                msg_type: sensor_msgs/Imu
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 324
+                                    column: 24
+                              - topic: /mobile_base/sensors/imu_data_raw
+                                msg_type: sensor_msgs/Imu
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 325
+                                    column: 28
+                              - topic: /mobile_base/debug/raw_data_command
+                                msg_type: std_msgs/String
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 326
+                                    column: 32
+                              - topic: /mobile_base/debug/raw_data_stream
+                                msg_type: std_msgs/String
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 327
+                                    column: 31
+                              - topic: /mobile_base/debug/raw_control_command
+                                msg_type: std_msgs/Int16MultiArray
+                                queue_size: 100
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 328
+                                    column: 35
+                            subscribers:
+                              - topic: /mobile_base/commands/velocity
+                                msg_type: geometry_msgs/Twist
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 337
+                                    column: 33
+                              - topic: /mobile_base/commands/led1
+                                msg_type: kobuki_msgs/Led
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 338
+                                    column: 30
+                              - topic: /mobile_base/commands/led2
+                                msg_type: kobuki_msgs/Led
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 339
+                                    column: 30
+                              - topic: /mobile_base/commands/digital_output
+                                msg_type: kobuki_msgs/DigitalOutput
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 340
+                                    column: 40
+                              - topic: /mobile_base/commands/external_power
+                                msg_type: kobuki_msgs/ExternalPower
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 341
+                                    column: 40
+                              - topic: /mobile_base/commands/sound
+                                msg_type: kobuki_msgs/Sound
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 342
+                                    column: 31
+                              - topic: /mobile_base/commands/reset_odometry
+                                msg_type: std_msgs/Empty
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 343
+                                    column: 31
+                              - topic: /mobile_base/commands/motor_power
+                                msg_type: kobuki_msgs/MotorPower
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 344
+                                    column: 28
+                              - topic: /mobile_base/commands/controller_info
+                                msg_type: kobuki_msgs/ControllerInfo
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 345
+                                    column: 41
+                            getters:
+                              - parameter: /mobile_base/acceleration_limiter
+                                param_type: bool
+                                default_value: false
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 139
+                                    column: 3
+                              - parameter: /mobile_base/battery_capacity
+                                param_type: double
+                                default_value: 16.5
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 140
+                                    column: 3
+                              - parameter: /mobile_base/battery_low
+                                param_type: double
+                                default_value: 14.0
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 141
+                                    column: 3
+                              - parameter: /mobile_base/battery_dangerous
+                                param_type: double
+                                default_value: 13.2
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 142
+                                    column: 3
+                              - parameter: /mobile_base/device_port
+                                param_type: str
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 145
+                                    column: 8
+                              - parameter: /mobile_base/wheel_left_joint_name
+                                param_type: str
+                                default_value: wheel_left_joint
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 156
+                                    column: 3
+                              - parameter: /mobile_base/wheel_right_joint_name
+                                param_type: str
+                                default_value: wheel_right_joint
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 157
+                                    column: 3
+                              - parameter: /robot_description
+                                param_type: str
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 160
+                                    column: 8
+                              - parameter: /mobile_base/cmd_vel_timeout
+                                param_type: double
+                                default_value: 0.6
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/odometry.cpp
+                                    line: 35
+                                    column: 3
+                              - parameter: /mobile_base/odom_frame
+                                param_type: str
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/odometry.cpp
+                                    line: 39
+                                    column: 8
+                              - parameter: /mobile_base/base_frame
+                                param_type: str
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/odometry.cpp
+                                    line: 45
+                                    column: 8
+                              - parameter: /mobile_base/publish_tf
+                                param_type: bool
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/odometry.cpp
+                                    line: 51
+                                    column: 8
+                              - parameter: /mobile_base/use_imu_heading
+                                param_type: bool
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/odometry.cpp
+                                    line: 61
+                                    column: 8
+                              - parameter: /mobile_base/diagnostic_period
+                                param_type: double
+                                traceability:
+                                    package: kobuki_node
+                                    file: src/library/kobuki_ros.cpp
+                                    line: 81
+                                    column: 1
+                        /bumper2pointcloud:
+                            node_type: kobuki_bumper2pc/Bumper2PcNodelet
+                            args: "load kobuki_bumper2pc/Bumper2PcNodelet mobile_base_nodelet_manager"
+                            remaps:
+                                /bumper2pointcloud/pointcloud: /mobile_base/sensors/bumper_pointcloud
+                                /bumper2pointcloud/core_sensors: /mobile_base/sensors/core
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/kobuki/bumper2pc.launch.xml
+                                line: 12
+                                column: 3
+                            publishers:
+                              - topic: /mobile_base/sensors/bumper_pointcloud
+                                original_name: /bumper2pointcloud/pointcloud
+                                msg_type: sensor_msgs/PointCloud2
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_bumper2pc
+                                    file: src/kobuki_bumper2pc.cpp
+                                    line: 131
+                                    column: 22
+                            subscribers:
+                              - topic: /mobile_base/sensors/core
+                                original_name: /bumper2pointcloud/core_sensors
+                                msg_type: kobuki_msgs/SensorState
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_bumper2pc
+                                    file: src/kobuki_bumper2pc.cpp
+                                    line: 132
+                                    column: 22
+                            getters:
+                              - parameter: /bumper2pointcloud/pointcloud_radius
+                                param_type: double
+                                default_value: 0.25
+                                traceability:
+                                    package: kobuki_bumper2pc
+                                    file: src/kobuki_bumper2pc.cpp
+                                    line: 84
+                                    column: 3
+                              - parameter: /bumper2pointcloud/pointcloud_height
+                                param_type: double
+                                default_value: 0.04
+                                traceability:
+                                    package: kobuki_bumper2pc
+                                    file: src/kobuki_bumper2pc.cpp
+                                    line: 85
+                                    column: 3
+                              - parameter: /bumper2pointcloud/side_point_angle
+                                param_type: double
+                                default_value: 0.34906585
+                                traceability:
+                                    package: kobuki_bumper2pc
+                                    file: src/kobuki_bumper2pc.cpp
+                                    line: 86
+                                    column: 3
+                              - parameter: /bumper2pointcloud/base_link_frame
+                                param_type: str
+                                default_value: /base_link
+                                traceability:
+                                    package: kobuki_bumper2pc
+                                    file: src/kobuki_bumper2pc.cpp
+                                    line: 87
+                                    column: 3
+                        /cmd_vel_mux:
+                            node_type: yocs_cmd_vel_mux/CmdVelMuxNodelet
+                            args: "load yocs_cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager"
+                            remaps:
+                                /cmd_vel_mux/output: /mobile_base/commands/velocity
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/mobile_base.launch.xml
+                                line: 19
+                                column: 3
+                            publishers:
+                              - topic: /cmd_vel_mux/active
+                                msg_type: std_msgs/String
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 99
+                                    column: 23
+                              - topic: /mobile_base/commands/velocity
+                                original_name: /cmd_vel_mux/output
+                                msg_type: geometry_msgs/Twist
+                                queue_size: 10
+                                # conditions:
+                                  # - -
+                                        # package: yocs_cmd_vel_mux
+                                        # file: src/cmd_vel_mux_nodelet.cpp
+                                        # line: 173
+                                        # column: 3
+                                        # statement: if
+                                        # condition: "output_topic_name != output_name"
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 176
+                                    column: 24
+                              - topic: /cmd_vel_mux/parameter_descriptions
+                                msg_type: dynamic_reconfigure/ConfigDescription
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 96
+                                    column: 32
+                              - topic: /cmd_vel_mux/parameter_updates
+                                msg_type: dynamic_reconfigure/Config
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 96
+                                    column: 32
+                            subscribers:
+                              - topic: /cmd_vel_mux/input/safety_controller
+                                msg_type: geometry_msgs/Twist
+                                queue_size: 10
+                                # conditions:
+                                  # - -
+                                        # package: yocs_cmd_vel_mux
+                                        # file: src/cmd_vel_mux_nodelet.cpp
+                                        # line: 202
+                                        # column: 3
+                                        # statement: for
+                                        # condition: "i < cmd_vel_subs.size()"
+                                    # -
+                                        # package: yocs_cmd_vel_mux
+                                        # file: src/cmd_vel_mux_nodelet.cpp
+                                        # line: 204
+                                        # column: 5
+                                        # statement: if
+                                        # condition: "!cmd_vel_subs[i]->subs"
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 207
+                                    column: 11
+                              - topic: /cmd_vel_mux/input/teleop
+                                msg_type: geometry_msgs/Twist
+                                queue_size: 10
+                                # conditions:
+                                  # - -
+                                        # package: yocs_cmd_vel_mux
+                                        # file: src/cmd_vel_mux_nodelet.cpp
+                                        # line: 202
+                                        # column: 3
+                                        # statement: for
+                                        # condition: "i < cmd_vel_subs.size()"
+                                    # -
+                                        # package: yocs_cmd_vel_mux
+                                        # file: src/cmd_vel_mux_nodelet.cpp
+                                        # line: 204
+                                        # column: 5
+                                        # statement: if
+                                        # condition: "!cmd_vel_subs[i]->subs"
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 207
+                                    column: 11
+                              - topic: /cmd_vel_mux/input/switch
+                                msg_type: geometry_msgs/Twist
+                                queue_size: 10
+                                # conditions:
+                                  # - -
+                                        # package: yocs_cmd_vel_mux
+                                        # file: src/cmd_vel_mux_nodelet.cpp
+                                        # line: 202
+                                        # column: 3
+                                        # statement: for
+                                        # condition: "i < cmd_vel_subs.size()"
+                                    # -
+                                        # package: yocs_cmd_vel_mux
+                                        # file: src/cmd_vel_mux_nodelet.cpp
+                                        # line: 204
+                                        # column: 5
+                                        # statement: if
+                                        # condition: "!cmd_vel_subs[i]->subs"
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 207
+                                    column: 11
+                              - topic: /cmd_vel_mux/input/navi
+                                msg_type: geometry_msgs/Twist
+                                queue_size: 10
+                                # conditions:
+                                  # - -
+                                        # package: yocs_cmd_vel_mux
+                                        # file: src/cmd_vel_mux_nodelet.cpp
+                                        # line: 202
+                                        # column: 3
+                                        # statement: for
+                                        # condition: "i < cmd_vel_subs.size()"
+                                    # -
+                                        # package: yocs_cmd_vel_mux
+                                        # file: src/cmd_vel_mux_nodelet.cpp
+                                        # line: 204
+                                        # column: 5
+                                        # statement: if
+                                        # condition: "!cmd_vel_subs[i]->subs"
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 207
+                                    column: 11
+                            servers:
+                              - service: /cmd_vel_mux/set_parameters
+                                srv_type: dynamic_reconfigure/Reconfigure
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 96
+                                    column: 32
+                            setters:
+                              - parameter: /cmd_vel_mux/yaml_cfg_file
+                                param_type: str
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 96
+                                    column: 32
+                              - parameter: /cmd_vel_mux/yaml_cfg_data
+                                param_type: str
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 96
+                                    column: 32
+                            getters:
+                              - parameter: /cmd_vel_mux/yaml_cfg_file
+                                param_type: str
+                                # conditions:
+                                  # - -
+                                        # package: yocs_cmd_vel_mux
+                                        # file: src/cmd_vel_mux_nodelet.cpp
+                                        # # line: 122
+                                        # line: 118
+                                        # column: 3
+                                        # # statement: else
+                                        # statement: if
+                                        # condition: "config.yaml_cfg_data.size() > 0"
+                                    # -
+                                        # package: yocs_cmd_vel_mux
+                                        # file: src/cmd_vel_mux_nodelet.cpp
+                                        # line: 125
+                                        # column: 5
+                                        # statement: if
+                                        # condition: 'config.yaml_cfg_file == ""'
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 128
+                                    column: 7
+                              - parameter: /cmd_vel_mux/yaml_cfg_file
+                                param_type: str
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 96
+                                    column: 32
+                              - parameter: /cmd_vel_mux/yaml_cfg_data
+                                param_type: str
+                                traceability:
+                                    package: yocs_cmd_vel_mux
+                                    file: src/cmd_vel_mux_nodelet.cpp
+                                    line: 96
+                                    column: 32
+                        /turtlebot_laptop_battery:
+                            node_type: laptop_battery_monitor/laptop_battery.py
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/netbook.launch.xml
+                                line: 6
+                                column: 3
+                            # ignore ROS API
+                    parameters:
+                        /use_sim_time:
+                            default_value: false
+                            param_type: bool
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/minimal.launch
+                                line: 10
+                                column: 3
+                        /robot_description:
+                            default_value: "<xml></xml>" # not really, it is a *lot* of XML
+                            param_type: str
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/description.launch.xml
+                                line: 10
+                                column: 3
+                        /robot/name:
+                            default_value: turtlebot
+                            param_type: str
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/robot.launch.xml
+                                line: 16
+                                column: 3
+                        /robot/type:
+                            default_value: turtlebot
+                            param_type: str
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/robot.launch.xml
+                                line: 17
+                                column: 3
+                        /robot_state_publisher/publish_frequency:
+                            default_value: 5.0
+                            param_type: double
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/robot.launch.xml
+                                line: 20
+                                column: 5
+                        /diagnostic_aggregator:
+                            param_type: yaml
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/robot.launch.xml
+                                line: 23
+                                column: 5
+                            default_value:
+                                pub_rate: 1.0
+                                base_path: ""
+                                analyzers:
+                                    power:
+                                        type: diagnostic_aggregator/GenericAnalyzer
+                                        path: Power System
+                                        timeout: 5.0
+                                        contains:
+                                            - Battery
+                                            - Laptop Battery
+                                        remove_prefix: mobile_base_nodelet_manager
+                                    kobuki:
+                                        type: diagnostic_aggregator/GenericAnalyzer
+                                        path: Kobuki
+                                        timeout: 5.0
+                                        contains:
+                                            - Watchdog
+                                            - Motor State
+                                        remove_prefix: mobile_base_nodelet_manager
+                                    sensors:
+                                        type: diagnostic_aggregator/GenericAnalyzer
+                                        path: Sensors
+                                        timeout: 5.0
+                                        contains:
+                                            - Cliff Sensor
+                                            - Wall Sensor
+                                            - Wheel Drop
+                                            - Motor Current
+                                            - Gyro Sensor
+                                        remove_prefix: mobile_base_nodelet_manager
+                                    input_ports:
+                                        type: diagnostic_aggregator/GenericAnalyzer
+                                        path: Input Ports
+                                        timeout: 5.0
+                                        contains:
+                                            - Digital Input
+                                            - Analog Input
+                                        remove_prefix: mobile_base_nodelet_manager
+                        /mobile_base/device_port:
+                            default_value: /dev/kobuki
+                            param_type: str
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/kobuki/mobile_base.launch.xml
+                                line: 10
+                                column: 5
+                        /mobile_base:
+                            param_type: yaml
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/kobuki/mobile_base.launch.xml
+                                line: 9
+                                column: 5
+                            default_value:
+                                wheel_left_joint_name: wheel_left_joint
+                                wheel_right_joint_name: wheel_right_joint
+                                battery_capacity: 16.5
+                                battery_low: 14.0
+                                battery_dangerous: 13.2
+                                cmd_vel_timeout: 0.6
+                                publish_tf: true
+                                use_imu_heading: true
+                                odom_frame: odom
+                                base_frame: base_footprint
+                        /bumper2pointcloud/pointcloud_radius:
+                            default_value: 0.24
+                            param_type: double
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/kobuki/bumper2pc.launch.xml
+                                line: 13
+                                column: 5
+                        /cmd_vel_mux/yaml_cfg_file:
+                            default_value: /home/andre/ros/ws/src/turtlebot/turtlebot_bringup/param/mux.yaml
+                            param_type: str
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/mobile_base.launch.xml
+                                line: 20
+                                column: 5
+                        /turtlebot_laptop_battery/acpi_path:
+                            default_value: /sys/class/power_supply/BAT0
+                            param_type: str
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/includes/netbook.launch.xml
+                                line: 7
+                                column: 9
+
+# http://wiki.ros.org/turtlebot_navigation/Tutorials/indigo/Autonomously%20navigate%20in%20a%20known%20map
+    turtlebot_amcl:
+        launch:
+            - turtlebot_bringup/launch/minimal.launch
+            - turtlebot_navigation/launch/amcl_demo.launch
+        user_data:
+            haros_plugin_model_ged:
+                import:
+                    - turtlebot_minimal
+                ignore:
+                    namespace:
+                        - /camera
+                truth:
+                    nodes:
+                        /camera/camera_nodelet_manager:
+                            node_type: nodelet/nodelet
+                            args: "manager"
+                            traceability:
+                                package: rgbd_launch
+                                file: launch/includes/manager.launch.xml
+                                line: 19
+                                column: 3
+                            # ignore ROS API
+                        /camera/driver:
+                            node_type: openni2_camera/OpenNI2DriverNodelet
+                            args: "load openni2_camera/OpenNI2DriverNodelet camera_nodelet_manager --no-bond"
+                            remaps:
+                                /camera/ir: /camera/ir
+                                /camera/rgb: /camera/rgb
+                                /camera/depth: /camera/depth
+                                /camera/depth_registered: /camera/depth_registered
+                                /camera/rgb/image: /camera/rgb/image_raw
+                                /camera/depth/image: /camera/depth_registered/image_raw
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 44
+                                column: 3
+                            # ignore ROS API
+                        /camera/ir_rectify_ir:
+                            node_type: image_proc/rectify
+                            args: "load image_proc/rectify camera_nodelet_manager --no-bond"
+                            remaps:
+                                /camera/image_mono: /camera/ir/image_raw
+                                /camera/image_rect: /camera/ir/image_rect_ir
+                            traceability:
+                                package: rgbd_launch
+                                file: launch/includes/ir.launch.xml
+                                line: 11
+                                column: 3
+                            # ignore ROS API
+                        /camera/register_depth_rgb:
+                            node_type: depth_image_proc/register
+                            args: "load depth_image_proc/register camera_nodelet_manager --no-bond"
+                            remaps:
+                                /camera/rgb/camera_info: /camera/rgb/camera_info
+                                /camera/depth/camera_info: /camera/depth/camera_info
+                                /camera/depth/image_rect: /camera/depth/image_rect_raw
+                                /camera/depth_registered/image_rect: /camera/depth_registered/sw_registered/image_rect_raw
+                            traceability:
+                                package: rgbd_launch
+                                file: launch/includes/depth_registered.launch.xml
+                                line: 29
+                                column: 5
+                            # ignore ROS API
+                        /camera/points_xyzrgb_sw_registered:
+                            node_type: depth_image_proc/point_cloud_xyzrgb
+                            args: "load depth_image_proc/point_cloud_xyzrgb camera_nodelet_manager --no-bond"
+                            remaps:
+                                /camera/rgb/image_rect_color: /camera/rgb/image_rect_color
+                                /camera/rgb/camera_info: /camera/rgb/camera_info
+                                /camera/depth_registered/image_rect: /camera/depth_registered/sw_registered/image_rect_raw
+                                /camera/depth_registered/points: /camera/depth_registered/points
+                            traceability:
+                                package: rgbd_launch
+                                file: launch/includes/depth_registered.launch.xml
+                                line: 40
+                                column: 5
+                            # ignore ROS API
+                        /camera/depth_registered_sw_metric_rect:
+                            node_type: depth_image_proc/convert_metric
+                            args: "load depth_image_proc/convert_metric camera_nodelet_manager --no-bond"
+                            remaps:
+                                /camera/image_raw: /camera/depth_registered/sw_registered/image_rect_raw
+                                /camera/image: /camera/depth_registered/sw_registered/image_rect
+                            traceability:
+                                package: rgbd_launch
+                                file: launch/includes/depth_registered.launch.xml
+                                line: 51
+                                column: 5
+                            # ignore ROS API
+                        /camera/disparity_depth:
+                            node_type: depth_image_proc/disparity
+                            args: "load depth_image_proc/disparity camera_nodelet_manager --no-bond"
+                            remaps:
+                                /camera/left/image_rect: /camera/depth/image_rect_raw
+                                /camera/right: /camera/projector
+                                /camera/left/disparity: /camera/depth/disparity
+                            traceability:
+                                package: rgbd_launch
+                                file: launch/includes/disparity.launch.xml
+                                line: 12
+                                column: 3
+                            # ignore ROS API
+                        /camera/disparity_registered_sw:
+                            node_type: depth_image_proc/disparity
+                            args: "load depth_image_proc/disparity camera_nodelet_manager --no-bond"
+                            remaps:
+                                /camera/left/image_rect: /camera/depth_registered/sw_registered/image_rect_raw
+                                /camera/right: /camera/projector
+                                /camera/left/disparity: /camera/depth_registered/disparity
+                            traceability:
+                                package: rgbd_launch
+                                file: launch/includes/disparity_registered.launch.xml
+                                line: 15
+                                column: 3
+                            # ignore ROS API
+                        /depthimage_to_laserscan:
+                            node_type: depthimage_to_laserscan/DepthImageToLaserScanNodelet
+                            args: "load depthimage_to_laserscan/DepthImageToLaserScanNodelet camera/camera_nodelet_manager"
+                            remaps:
+                                /image: /camera/depth/image_raw
+                                /scan: /scan
+                                /camera/image: /camera/depth/image_raw
+                                /camera/scan: /scan
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/3dsensor.launch
+                                line: 62
+                                column: 5
+                            # ignore ROS API
+                        /map_server:
+                            node_type: map_server/map_server
+                            #args: "$(env TURTLEBOT_MAP_FILE)"
+                            args: "/home/andre/ros/ws/src/turtlebot_apps/turtlebot_navigation/maps/willow-2010-02-18-0.10.yaml"
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/amcl_demo.launch
+                                line: 16
+                                column: 3
+                            # ignore ROS API
+                        /amcl:
+                            node_type: amcl/amcl
+                            remaps:
+                                /scan: /scan
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 11
+                                column: 3
+                            # ignore ROS API
+                        /navigation_velocity_smoother:
+                            node_type: yocs_velocity_smoother/VelocitySmootherNodelet
+                            args: "load yocs_velocity_smoother/VelocitySmootherNodelet mobile_base_nodelet_manager"
+                            remaps:
+                                /navigation_velocity_smoother/smooth_cmd_vel: /cmd_vel_mux/input/navi
+                                /navigation_velocity_smoother/odometry: /odom
+                                /navigation_velocity_smoother/robot_cmd_vel: /mobile_base/commands/velocity
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/velocity_smoother.launch.xml
+                                line: 5
+                                column: 3
+                            publishers:
+                              - topic: /navigation_velocity_smoother/parameter_descriptions
+                                msg_type: dynamic_reconfigure/ConfigDescription
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 279
+                                    column: 32
+                              - topic: /navigation_velocity_smoother/parameter_updates
+                                msg_type: dynamic_reconfigure/Config
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 279
+                                    column: 32
+                              - topic: /cmd_vel_mux/input/navi
+                                original_name: /navigation_velocity_smoother/smooth_cmd_vel
+                                msg_type: geometry_msgs/Twist
+                                queue_size: 1
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 321
+                                    column: 21
+                            subscribers:
+                              - topic: /odom
+                                original_name: /navigation_velocity_smoother/odometry
+                                msg_type: nav_msgs/Odometry
+                                queue_size: 1
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 318
+                                    column: 21
+                              - topic: /mobile_base/commands/velocity
+                                original_name: /navigation_velocity_smoother/robot_cmd_vel
+                                msg_type: geometry_msgs/Twist
+                                queue_size: 1
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 319
+                                    column: 21
+                              - topic: /navigation_velocity_smoother/raw_cmd_vel
+                                msg_type: geometry_msgs/Twist
+                                queue_size: 1
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 320
+                                    column: 21
+                            servers:
+                              - service: /navigation_velocity_smoother/set_parameters
+                                srv_type: dynamic_reconfigure/Reconfigure
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 279
+                                    column: 32
+                            setters:
+                              - parameter: /navigation_velocity_smoother/speed_lim_v
+                                param_type: double
+                                # value: 1.0 if not set
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 279
+                                    column: 32
+                              - parameter: /navigation_velocity_smoother/speed_lim_w
+                                param_type: double
+                                # value: 5.0 if not set
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 279
+                                    column: 32
+                              - parameter: /navigation_velocity_smoother/accel_lim_v
+                                param_type: double
+                                # value: 0.5 if not set
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 279
+                                    column: 32
+                              - parameter: /navigation_velocity_smoother/accel_lim_w
+                                param_type: double
+                                # value: 2.5 if not set
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 279
+                                    column: 32
+                              - parameter: /navigation_velocity_smoother/decel_factor
+                                param_type: double
+                                # value: 1.0 if not set
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 279
+                                    column: 32
+                            getters:
+                              - parameter: /navigation_velocity_smoother/speed_lim_v
+                                param_type: double
+                                # default_value: 1.0
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 279
+                                    column: 32
+                              - parameter: /navigation_velocity_smoother/speed_lim_w
+                                param_type: double
+                                # default_value: 5.0
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 279
+                                    column: 32
+                              - parameter: /navigation_velocity_smoother/accel_lim_v
+                                param_type: double
+                                # default_value: 0.5
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 279
+                                    column: 32
+                              - parameter: /navigation_velocity_smoother/accel_lim_w
+                                param_type: double
+                                # default_value: 2.5
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 279
+                                    column: 32
+                              - parameter: /navigation_velocity_smoother/decel_factor
+                                param_type: double
+                                # default_value: 1.0
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 279
+                                    column: 32
+                              - parameter: /navigation_velocity_smoother/frequency
+                                param_type: double
+                                default_value: 20.0
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 284
+                                    column: 3
+                              - parameter: /navigation_velocity_smoother/quiet
+                                param_type: bool
+                                default_value: false
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 285
+                                    column: 3
+                              - parameter: /navigation_velocity_smoother/decel_factor
+                                param_type: double
+                                default_value: 1.0
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 286
+                                    column: 3
+                              - parameter: /navigation_velocity_smoother/robot_feedback
+                                param_type: int
+                                default_value: 0
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 287
+                                    column: 3
+                              - parameter: /navigation_velocity_smoother/speed_lim_v
+                                param_type: double
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 299
+                                    column: 8
+                              - parameter: /navigation_velocity_smoother/speed_lim_w
+                                param_type: double
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 300
+                                    column: 8
+                              - parameter: /navigation_velocity_smoother/accel_lim_v
+                                param_type: double
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 306
+                                    column: 8
+                              - parameter: /navigation_velocity_smoother/accel_lim_w
+                                param_type: double
+                                traceability:
+                                    package: yocs_velocity_smoother
+                                    file: src/velocity_smoother_nodelet.cpp
+                                    line: 307
+                                    column: 8
+                        /kobuki_safety_controller:
+                            node_type: kobuki_safety_controller/SafetyControllerNodelet
+                            args: "load kobuki_safety_controller/SafetyControllerNodelet mobile_base_nodelet_manager"
+                            remaps:
+                                /kobuki_safety_controller/cmd_vel: /cmd_vel_mux/input/safety_controller
+                                /kobuki_safety_controller/events/bumper: /mobile_base/events/bumper
+                                /kobuki_safety_controller/events/cliff: /mobile_base/events/cliff
+                                /kobuki_safety_controller/events/wheel_drop: /mobile_base/events/wheel_drop
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/safety_controller.launch.xml
+                                line: 5
+                                column: 3
+                            publishers:
+                              - topic: /cmd_vel_mux/input/safety_controller
+                                original_name: /kobuki_safety_controller/cmd_vel
+                                msg_type: geometry_msgs/Twist
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_safety_controller
+                                    file: include/kobuki_safety_controller/safety_controller.hpp
+                                    line: 110
+                                    column: 35
+                            subscribers:
+                              - topic: /kobuki_safety_controller/enable
+                                msg_type: std_msgs/Empty
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_safety_controller
+                                    file: include/kobuki_safety_controller/safety_controller.hpp
+                                    line: 104
+                                    column: 37
+                              - topic: /kobuki_safety_controller/disable
+                                msg_type: std_msgs/Empty
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_safety_controller
+                                    file: include/kobuki_safety_controller/safety_controller.hpp
+                                    line: 105
+                                    column: 38
+                              - topic: /mobile_base/events/bumper
+                                original_name: /kobuki_safety_controller/events/bumper
+                                msg_type: kobuki_msgs/BumperEvent
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_safety_controller
+                                    file: include/kobuki_safety_controller/safety_controller.hpp
+                                    line: 106
+                                    column: 32
+                              - topic: /mobile_base/events/cliff
+                                original_name: /kobuki_safety_controller/events/cliff
+                                msg_type: kobuki_msgs/CliffEvent
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_safety_controller
+                                    file: include/kobuki_safety_controller/safety_controller.hpp
+                                    line: 107
+                                    column: 32
+                              - topic: /mobile_base/events/wheel_drop
+                                original_name: /kobuki_safety_controller/events/wheel_drop
+                                msg_type: kobuki_msgs/WheelDropEvent
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_safety_controller
+                                    file: include/kobuki_safety_controller/safety_controller.hpp
+                                    line: 108
+                                    column: 32
+                              - topic: /kobuki_safety_controller/reset
+                                msg_type: std_msgs/Empty
+                                queue_size: 10
+                                traceability:
+                                    package: kobuki_safety_controller
+                                    file: include/kobuki_safety_controller/safety_controller.hpp
+                                    line: 109
+                                    column: 39
+                            getters:
+                              - parameter: /kobuki_safety_controller/time_to_extend_bump_cliff_events
+                                param_type: double
+                                default_value: 0.0
+                                traceability:
+                                    package: kobuki_safety_controller
+                                    file: include/kobuki_safety_controller/safety_controller.hpp
+                                    line: 102
+                                    column: 5
+                        /move_base:
+                            node_type: move_base/move_base
+                            remaps:
+                                /cmd_vel: /navigation_velocity_smoother/raw_cmd_vel
+                                /odom: /odom
+                                /scan: /scan
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 15
+                                column: 3
+                            # ignore ROS API
+                    parameters:
+                        /camera/camera_nodelet_manager/num_worker_threads:
+                            default_value: 4
+                            param_type: int
+                            traceability:
+                                package: rgbd_launch
+                                file: launch/includes/manager.launch.xml
+                                line: 21
+                                column: 6
+                        /camera/driver/device_id:
+                            default_value: "#1"
+                            param_type: str
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 47
+                                column: 5
+                        /camera/driver/id_manufacturer:
+                            default_value: "1d27"
+                            param_type: str
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 48
+                                column: 5
+                        /camera/driver/id_product:
+                            default_value: "0601"
+                            param_type: str
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 49
+                                column: 5
+                        /camera/driver/rgb_camera_info_url:
+                            default_value: ""
+                            param_type: str
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 50
+                                column: 5
+                        /camera/driver/depth_camera_info_url:
+                            default_value: ""
+                            param_type: str
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 51
+                                column: 5
+                        /camera/driver/rgb_frame_id:
+                            default_value: camera_rgb_optical_frame
+                            param_type: str
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 52
+                                column: 5
+                        /camera/driver/depth_frame_id:
+                            default_value: camera_depth_optical_frame
+                            param_type: str
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 53
+                                column: 5
+                        /camera/driver/ir_mode:
+                            default_value: 5
+                            param_type: int
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 55
+                                column: 5
+                        /camera/driver/color_mode:
+                            default_value: 5
+                            param_type: int
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 56
+                                column: 5
+                        /camera/driver/depth_mode:
+                            default_value: 5
+                            param_type: int
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 57
+                                column: 5
+                        /camera/driver/depth_registration:
+                            default_value: false
+                            param_type: bool
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 59
+                                column: 5
+                        /camera/driver/color_depth_synchronization:
+                            default_value: false
+                            param_type: bool
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 60
+                                column: 5
+                        /camera/driver/enable_reconnect:
+                            default_value: true
+                            param_type: bool
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 62
+                                column: 5
+                        /camera/driver/serialnumber_as_name:
+                            default_value: false
+                            param_type: bool
+                            traceability:
+                                package: openni2_launch
+                                file: launch/includes/device.launch.xml
+                                line: 63
+                                column: 5
+                        /camera/disparity_depth/min_range:
+                            default_value: 0.5
+                            param_type: double
+                            traceability:
+                                package: rgbd_launch
+                                file: launch/includes/disparity.launch.xml
+                                line: 20
+                                column: 5
+                        /camera/disparity_depth/max_range:
+                            default_value: 4.0
+                            param_type: double
+                            traceability:
+                                package: rgbd_launch
+                                file: launch/includes/disparity.launch.xml
+                                line: 21
+                                column: 5
+                        /camera/disparity_registered_sw/min_range:
+                            default_value: 0.5
+                            param_type: double
+                            traceability:
+                                package: rgbd_launch
+                                file: launch/includes/disparity_registered.launch.xml
+                                line: 24
+                                column: 5
+                        /camera/disparity_registered_sw/max_range:
+                            default_value: 4.0
+                            param_type: double
+                            traceability:
+                                package: rgbd_launch
+                                file: launch/includes/disparity_registered.launch.xml
+                                line: 25
+                                column: 5
+                        /depthimage_to_laserscan/scan_height:
+                            default_value: 10
+                            param_type: int
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/3dsensor.launch
+                                line: 65
+                                column: 7
+                        /depthimage_to_laserscan/output_frame_id:
+                            default_value: camera_depth_frame
+                            param_type: str
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/3dsensor.launch
+                                line: 66
+                                column: 7
+                        /depthimage_to_laserscan/range_min:
+                            default_value: 0.45
+                            param_type: double
+                            traceability:
+                                package: turtlebot_bringup
+                                file: launch/3dsensor.launch
+                                line: 67
+                                column: 7
+                        /amcl/use_map_topic:
+                            default_value: false
+                            param_type: bool
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 12
+                                column: 5
+                        /amcl/odom_model_type:
+                            default_value: diff
+                            param_type: str
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 14
+                                column: 5
+                        /amcl/odom_alpha5:
+                            default_value: 0.1
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 15
+                                column: 5
+                        /amcl/gui_publish_rate:
+                            default_value: 10.0
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 16
+                                column: 5
+                        /amcl/laser_max_beams:
+                            default_value: 60
+                            param_type: int
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 17
+                                column: 5
+                        /amcl/laser_max_range:
+                            default_value: 12.0
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 18
+                                column: 5
+                        /amcl/min_particles:
+                            default_value: 500
+                            param_type: int
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 19
+                                column: 5
+                        /amcl/max_particles:
+                            default_value: 2000
+                            param_type: int
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 20
+                                column: 5
+                        /amcl/kld_err:
+                            default_value: 0.05
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 21
+                                column: 5
+                        /amcl/kld_z:
+                            default_value: 0.99
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 22
+                                column: 5
+                        /amcl/odom_alpha1:
+                            default_value: 0.2
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 23
+                                column: 5
+                        /amcl/odom_alpha2:
+                            default_value: 0.2
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 24
+                                column: 5
+                        /amcl/odom_alpha3:
+                            default_value: 0.2
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 26
+                                column: 5
+                        /amcl/odom_alpha4:
+                            default_value: 0.2
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 27
+                                column: 5
+                        /amcl/laser_z_hit:
+                            default_value: 0.5
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 28
+                                column: 5
+                        /amcl/laser_z_short:
+                            default_value: 0.05
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 29
+                                column: 5
+                        /amcl/laser_z_max:
+                            default_value: 0.05
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 30
+                                column: 5
+                        /amcl/laser_z_rand:
+                            default_value: 0.5
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 31
+                                column: 5
+                        /amcl/laser_sigma_hit:
+                            default_value: 0.2
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 32
+                                column: 5
+                        /amcl/laser_lambda_short:
+                            default_value: 0.1
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 33
+                                column: 5
+                        /amcl/laser_model_type:
+                            default_value: likelihood_field
+                            param_type: str
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 34
+                                column: 5
+                        /amcl/laser_likelihood_max_dist:
+                            default_value: 2.0
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 36
+                                column: 5
+                        /amcl/update_min_d:
+                            default_value: 0.25
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 37
+                                column: 5
+                        /amcl/update_min_a:
+                            default_value: 0.2
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 38
+                                column: 5
+                        /amcl/odom_frame_id:
+                            default_value: odom
+                            param_type: str
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 39
+                                column: 5
+                        /amcl/base_frame_id:
+                            default_value: base_footprint
+                            param_type: str
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 40
+                                column: 5
+                        /amcl/global_frame_id:
+                            default_value: map
+                            param_type: str
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 41
+                                column: 5
+                        /amcl/resample_interval:
+                            default_value: 1
+                            param_type: int
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 42
+                                column: 5
+                        /amcl/transform_tolerance:
+                            default_value: 1.0
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 44
+                                column: 5
+                        /amcl/recovery_alpha_slow:
+                            default_value: 0.0
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 45
+                                column: 5
+                        /amcl/recovery_alpha_fast:
+                            default_value: 0.0
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 46
+                                column: 5
+                        /amcl/initial_pose_x:
+                            default_value: 0.0
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 47
+                                column: 5
+                        /amcl/initial_pose_y:
+                            default_value: 0.0
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 48
+                                column: 5
+                        /amcl/initial_pose_a:
+                            default_value: 0.0
+                            param_type: double
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/amcl/asus_xtion_pro_amcl.launch.xml
+                                line: 49
+                                column: 5
+                        /navigation_velocity_smoother:
+                            param_type: yaml
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/velocity_smoother.launch.xml
+                                line: 6
+                                column: 5
+                            default_value:
+                                speed_lim_v: 0.8
+                                speed_lim_w: 5.4
+                                accel_lim_v: 1.0
+                                accel_lim_w: 2.0
+                                frequency: 20.0
+                                decel_factor: 1.5
+                                robot_feedback: 2
+                        /move_base/global_costmap:
+                            param_type: yaml
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 16
+                                column: 5
+                            default_value:
+                                max_obstacle_height: 0.60
+                                robot_radius: 0.20
+                                map_type: voxel
+                                obstacle_layer:
+                                    enabled: true
+                                    max_obstacle_height: 0.6
+                                    origin_z: 0.0
+                                    z_resolution: 0.2
+                                    z_voxels: 2
+                                    unknown_threshold: 15
+                                    mark_threshold: 0
+                                    combination_method: 1
+                                    track_unknown_space: true
+                                    obstacle_range: 2.5
+                                    raytrace_range: 3.0
+                                    origin_z: 0.0
+                                    z_resolution: 0.2
+                                    z_voxels: 2
+                                    publish_voxel_map: false
+                                    observation_sources: scan bump
+                                    scan:
+                                        data_type: LaserScan
+                                        topic: scan
+                                        marking: true
+                                        clearing: true
+                                        min_obstacle_height: 0.25
+                                        max_obstacle_height: 0.35
+                                    bump:
+                                        data_type: PointCloud2
+                                        topic: mobile_base/sensors/bumper_pointcloud
+                                        marking: true
+                                        clearing: false
+                                        min_obstacle_height: 0.0
+                                        max_obstacle_height: 0.15
+                                inflation_layer:
+                                    enabled: true
+                                    cost_scaling_factor: 5.0
+                                    inflation_radius: 0.5
+                                static_layer:
+                                    enabled: true
+                        /move_base/local_costmap:
+                            param_type: yaml
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 17
+                                column: 5
+                            default_value:
+                                max_obstacle_height: 0.60
+                                robot_radius: 0.20
+                                map_type: voxel
+                                obstacle_layer:
+                                    enabled: true
+                                    max_obstacle_height: 0.6
+                                    origin_z: 0.0
+                                    z_resolution: 0.2
+                                    z_voxels: 2
+                                    unknown_threshold: 15
+                                    mark_threshold: 0
+                                    combination_method: 1
+                                    track_unknown_space: true
+                                    obstacle_range: 2.5
+                                    raytrace_range: 3.0
+                                    origin_z: 0.0
+                                    z_resolution: 0.2
+                                    z_voxels: 2
+                                    publish_voxel_map: false
+                                    observation_sources: scan bump
+                                    scan:
+                                        data_type: LaserScan
+                                        topic: scan
+                                        marking: true
+                                        clearing: true
+                                        min_obstacle_height: 0.25
+                                        max_obstacle_height: 0.35
+                                    bump:
+                                        data_type: PointCloud2
+                                        topic: mobile_base/sensors/bumper_pointcloud
+                                        marking: true
+                                        clearing: false
+                                        min_obstacle_height: 0.0
+                                        max_obstacle_height: 0.15
+                                inflation_layer:
+                                    enabled: true
+                                    cost_scaling_factor: 5.0
+                                    inflation_radius: 0.5
+                                static_layer:
+                                    enabled: true
+                        /move_base/local_costmap/update_frequency:
+                            param_type: double
+                            default_value: 5.0
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 18
+                                column: 5
+                        /move_base/local_costmap/publish_frequency:
+                            param_type: double
+                            default_value: 2.0
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 18
+                                column: 5
+                        /move_base/local_costmap/static_map:
+                            param_type: bool
+                            default_value: false
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 18
+                                column: 5
+                        /move_base/local_costmap/rolling_window:
+                            param_type: bool
+                            default_value: true
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 18
+                                column: 5
+                        /move_base/local_costmap/width:
+                            param_type: double
+                            default_value: 4.0
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 18
+                                column: 5
+                        /move_base/local_costmap/height:
+                            param_type: double
+                            default_value: 4.0
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 18
+                                column: 5
+                        /move_base/local_costmap/resolution:
+                            param_type: double
+                            default_value: 0.05
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 18
+                                column: 5
+                        /move_base/local_costmap/transform_tolerance:
+                            param_type: double
+                            default_value: 0.5
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 18
+                                column: 5
+                        /move_base/local_costmap/plugins:
+                            param_type: yaml
+                            default_value:
+                                - {name: obstacle_layer, type: "costmap_2d::VoxelLayer"}
+                                - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 18
+                                column: 5
+                        /move_base/global_costmap/update_frequency:
+                            param_type: double
+                            default_value: 1.0
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 19
+                                column: 5
+                        /move_base/global_costmap/publish_frequency:
+                            param_type: double
+                            default_value: 0.5
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 19
+                                column: 5
+                        /move_base/global_costmap/static_map:
+                            param_type: bool
+                            default_value: true
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 19
+                                column: 5
+                        /move_base/global_costmap/transform_tolerance:
+                            param_type: double
+                            default_value: 0.5
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 19
+                                column: 5
+                        /move_base/global_costmap/plugins:
+                            param_type: yaml
+                            default_value:
+                                - {name: static_layer, type: "costmap_2d::StaticLayer"}
+                                - {name: obstacle_layer, type: "costmap_2d::VoxelLayer"}
+                                - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 19
+                                column: 5
+                        /move_base/DWAPlannerROS:
+                            param_type: yaml
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 20
+                                column: 5
+                            default_value:
+                                max_vel_x: 0.5
+                                min_vel_x: 0.0 
+                                max_vel_y: 0.0
+                                min_vel_y: 0.0
+                                max_trans_vel: 0.5
+                                min_trans_vel: 0.1
+                                trans_stopped_vel: 0.1
+                                max_rot_vel: 5.0
+                                min_rot_vel: 0.4
+                                rot_stopped_vel: 0.4
+                                acc_lim_x: 1.0
+                                acc_lim_theta: 2.0
+                                acc_lim_y: 0.0
+                                yaw_goal_tolerance: 0.3
+                                xy_goal_tolerance: 0.15
+                                sim_time: 1.0
+                                vx_samples: 6
+                                vy_samples: 1
+                                vtheta_samples: 20
+                                path_distance_bias: 64.0
+                                goal_distance_bias: 24.0
+                                occdist_scale: 0.5
+                                forward_point_distance: 0.325
+                                stop_time_buffer: 0.2
+                                scaling_speed: 0.25
+                                max_scaling_factor: 0.2
+                                oscillation_reset_dist: 0.05
+                                publish_traj_pc : true
+                                publish_cost_grid_pc: true
+                        /move_base:
+                            param_type: yaml
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 21
+                                column: 5
+                            default_value:
+                                shutdown_costmaps: false
+                                controller_frequency: 5.0
+                                controller_patience: 3.0
+                                planner_frequency: 1.0
+                                planner_patience: 5.0
+                                oscillation_timeout: 10.0
+                                oscillation_distance: 0.2
+                                base_local_planner: dwa_local_planner/DWAPlannerROS
+                                base_global_planner: navfn/NavfnROS
+                        /move_base/GlobalPlanner:
+                            param_type: yaml
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 22
+                                column: 5
+                            default_value:
+                                old_navfn_behavior: false
+                                use_quadratic: true
+                                use_dijkstra: true
+                                use_grid_path: false
+                                allow_unknown: true
+                                planner_window_x: 0.0
+                                planner_window_y: 0.0
+                                default_tolerance: 0.0
+                                publish_scale: 100
+                                planner_costmap_publish_frequency: 0.0
+                                lethal_cost: 253
+                                neutral_cost: 50
+                                cost_factor: 3.0
+                                publish_potential: true
+                        /move_base/NavfnROS:
+                            param_type: yaml
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 23
+                                column: 5
+                            default_value:
+                                visualize_potential: false
+                                allow_unknown: false
+                                planner_window_x: 0.0
+                                planner_window_y: 0.0
+                                default_tolerance: 0.0
+                        /move_base/global_costmap/global_frame:
+                            param_type: str
+                            default_value: map
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 28
+                                column: 5
+                        /move_base/global_costmap/robot_base_frame:
+                            param_type: str
+                            default_value: base_footprint
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 29
+                                column: 5
+                        /move_base/local_costmap/global_frame:
+                            param_type: str
+                            default_value: odom
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 30
+                                column: 5
+                        /move_base/local_costmap/robot_base_frame:
+                            param_type: str
+                            default_value: base_footprint
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 31
+                                column: 5
+                        /move_base/DWAPlannerROS/global_frame_id:
+                            param_type: str
+                            default_value: odom
+                            traceability:
+                                package: turtlebot_navigation
+                                file: launch/includes/move_base.launch.xml
+                                line: 32
+                                column: 5

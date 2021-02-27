@@ -35,7 +35,7 @@ As such, it has been analysed in terms of:
 - model checking.
 
 In the following subsections we provide further details on our approach to the various themes.
-The files found under the [*json* directory](./json/) can be copied to the HAROS viz's `data` directory for visualisation.
+The files found under the [`json` directory](./json/) can be copied to the HAROS viz's `data` directory for visualisation.
 
 ### Code Quality Analysis
 
@@ -201,14 +201,117 @@ We used some heuristics based on string comparison of the Topic names of publish
 Many times, this could be an indicator that the developer applied a name remapping on one of the nodes, but forgot to match it in another node, or that they forgot to apply remappings altogether.
 Wrong name remappings are another issue in ROS that can be manually detected during runtime (via inspection), but for which there are no built-in compile-time checks of any kind.
 
-**Query 8:** *Are there any uses of the message type* `std_msgs/Empty`*?*<br/>
+**Query 8:** *Are there any uses of the message type `std_msgs/Empty`?*<br/>
 This is a message type that contains no data, and thus should be treated specially.
 It is useful as a trigger for events or actions, but one should consider whether additional data could be of use.
 
 Overall there are 29 query matches, although none seem to be faults in the system.
-
+This is to be expected, since Kobuki has had years of development, testing and maintenance by many people.
+Such issues would have been detected and fixed at some point.
 
 ### Property-based Testing
+
+The Kobuki system has been used to evaluate the property-based test generation [plugin](https://github.com/git-afsantos/haros-plugin-pbt-gen) for HAROS.
+As a system that has had time to mature, the goal of this experiment was not to find bugs in its implementation, but rather to demonstrate the effectiveness of this testing technique.
+
+#### Methodology
+
+The property-based testing (PBT) technique used by this plugin must be able to reset the system under test (SUT) multiple times, to guarantee that, for each generated example, we run the SUT from a stable (and hopefully deterministic) state.
+This series of resets occurs in rapid succession, and is entirely impractical if hardware is involved.
+Thus, we opt to modify the tested configurations slightly (in particular, the *Safe Random Walker*) to remove any nodes that directly control hardware (the mobile base driver).
+Removing nodes turns out to be beneficial for another reason; it opens up several topics that the plugin can exploit as inputs, versus a system that could, otherwise, be fully connected.
+
+The plugin is evaluated on several fronts, and we used it to test not only the *Safe Random Walker* configuration but also some individual nodes, such as the safety controller.
+We first wrote specifications for each node, tested them, and then proceeded to the integrated environment.
+Not only does this reflect a more natural testing process adopted during development, it also helps us coming up with properties to write.
+Depending on the target system and on the specific nodes we are testing, some of the node's properties might convert, more or less directly, either to properties of the full system or to axioms that we want to assume for other tests.
+Note that, despite the additional work in writing the specifications, from the perspective of the testing tool there is no difference between testing individual nodes or entire systems -- the SUT is always treated as a black-box, with input and output message topics.
+
+Given that PBT focuses on discrepancies between implementation and specification, our evaluation process involves two types of testing, *positive testing* and *negative testing*.
+The former is the act of testing properties that we know to be true in advance.
+Its main purpose is simply to confirm that the plugin does not introduce false positives.
+The latter, on the other hand, is the act of testing properties that we know to be false in advance.
+In this case, the plugin should be able to find at least one counterexample for most properties.
+
+#### Evaluation Criteria
+
+Instead of simply writing arbitrary properties about the SUT, we follow a systematic method to write specifications.
+We start by writing a catalogue of true properties and axioms (assumptions) for each system.
+Then, we apply the principles of *specification mutation* to generate **mutants** (i.e., variants) from the initial catalogue of true properties.
+Mutations are often relatively small changes, such as changing a single operator or a variable.
+If the initial properties are as precise as we can write them, small changes introduced by the mutation process should end up generating a false property, in most cases.
+
+For each property mutant, we are interested in gathering the following metrics:
+
+- the number of required examples until a test fails for the first time;
+- the number of required examples until the final test result (includes the *shrinking* phase);
+- the number of invalid examples (discarded due to being unable to satisfy assumptions);
+- the required time to run each example (both from start to end, including launching the SUT, and to replay the example trace);
+- the size of the produced counterexample trace.
+
+With these metrics we are able to calculate aggregate metrics to provide an overview of the tool's performance.
+For instance, we are able to calculate:
+
+- the average number of examples needed to find a failure;
+- the average number of examples needed to report the final result;
+- the mean time to failure;
+- the excess messages in the counterexample input trace (i.e., how close it is to being a minimal counterexample);
+- specification coverage, a metric that assigns a score to a test suite and tells how effective it is at exercising the given specification.
+
+#### Artefacts
+
+The [project file](./projects/pbt-eval.yaml) contains all the tested configurations and the full catalogue of properties for each configuration.
+
+The original Kobuki launch files could not be used directly, as these included hardware-related nodes.
+The modified versions we used (referred to as part of the `hpl_test` package) can be found in the [launch directory](./launch/).
+
+#### Results
+
+The safety controller node was tested with a specification consisting of 12 axioms, 6 properties and 59 mutants.
+We achieved a near-perfect mutant score for this SUT, failing to kill a single mutant with a limit of 200 examples.
+
+The random walker controller node was tested with a specification consisting of 11 axioms, 4 properties and 34 mutants.
+We achieved a near-perfect mutant score for this SUT, failing to kill a single mutant with a limit of 200 examples.
+The mutant that we failed to kill is basically the same mutant that survived in the safety controller node, only for a different topic.
+
+The multiplexer node was tested with a shorter specification consisting of 2 axioms, 2 properties and 17 mutants.
+One of the main reasons for the shorter specification of this node was due to limitations of the specification language at the time.
+This SUT achieved a perfect mutant score.
+Out of the 17 killed mutants, 4 were reported as flaky tests, i.e., the results were not deterministic.
+
+The full *Safe Random Walker* configuration was tested with a specification consisting of 14 axioms, 5 properties and 45 mutants.
+The axioms are a combination of the same axioms used for the safety controller and the random walker controller nodes.
+This SUT also achieved a perfect mutant score, as shown in the following table.
+Out of the 45 killed mutants, only 2 were reported as flaky tests, with one of them being essentially the same property that led to false negatives in the safety controller and random walker controller nodes.
+
+| Metric            | Value      |
+|:---               | :---:      |
+| Mutants           | 45         |
+| Flaky Tests       | 2 (4.444%) |
+| False Negatives   | 0          |
+| Mutant Score      | 1.0        |
+
+Regarding other performance criteria, as per the following table, we did not observe anything out of the ordinary.
+The performance metrics seem to be on par with the tests for individual nodes.
+On average, each mutant requires about 20 examples to falsify (including the shrinking phase), considering the median of 16 and the mean of 22, although the tool tends to find an error for the first time relatively early (within the first 3 examples).
+Each example takes about 4.0 seconds to execute, and most of this time (3.2 seconds) is spent on launching and tearing down the SUT between examples.
+In total, this means that the average time to kill a mutant and obtain a counterexample is about 80 seconds.
+If a full ROS system could be reliably reset programatically (without killing the processes and launching new ones), it would take about 16 seconds instead.
+Despite the relatively long execution time, there are only 2 mutants for which the tool uses one message more than necessary.
+Curiously, neither of the non-minimal counterexamples is associated with the two flaky mutants.
+
+| Metric                      | Mean  | Std. Deviation | Median |
+| :-------------------------- | :---: | :------------: | :----: |
+| Number of examples          | 22    | 23             | 16     |
+| Number of failures          | 15    | 9              | 15     |
+| Examples to failure         | 3     | 9              | 1      |
+| Invalid examples            | 3     | 12             | 0      |
+| Shrink attempts             | 19    | 17             | 15     |
+| Time per example (s)        | 3.967 | 1.602          | 3.309  |
+| Trace duration (s)          | 0.800 | 1.068          | 0.308  |
+| Setup/Teardown time (s)     | 3.167 | 0.535          | 3.001  |
+| Input trace size (messages) | 1     | 1              | 1      |
+| Excess Messages             | 0     | 0              | 0      |
 
 ### Model Checking
 

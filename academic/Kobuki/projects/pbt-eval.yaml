@@ -1,0 +1,463 @@
+%YAML 1.1
+---
+project: Kobuki Property-based Testing
+packages:
+    - kobuki_node
+    - kobuki_safety_controller
+    - kobuki_keyop
+    - kobuki_random_walker
+    - kobuki_bumper2pc
+    - yocs_cmd_vel_mux
+    - yocs_velocity_smoother
+    - yocs_safety_controller
+    - hpl_test
+configurations:
+    safety_controller_node:
+        launch:
+            - hpl_test/launch/safety_controller_node.launch
+        hpl:
+            properties:
+                ################################################################
+                # axioms
+                - "globally: no /kobuki_safety_controller/reset"
+                - "globally: no /kobuki_safety_controller/enable"
+                - "globally: no /kobuki_safety_controller/disable"
+                - "globally: no /mobile_base/events/bumper { not state in {PRESSED, RELEASED} }"
+                - "globally: no /mobile_base/events/bumper { not bumper in {LEFT, CENTER, RIGHT} }"
+                - "globally: /mobile_base/events/bumper forbids /mobile_base/events/bumper within 100 ms"
+                - "globally: no /mobile_base/events/cliff { not state in {CLIFF, FLOOR} }"
+                - "globally: no /mobile_base/events/cliff { not sensor in {LEFT, CENTER, RIGHT} }"
+                - "globally: /mobile_base/events/cliff forbids /mobile_base/events/cliff within 100 ms"
+                - "globally: no /mobile_base/events/wheel_drop { not state in {DROPPED, RAISED} }"
+                - "globally: no /mobile_base/events/wheel_drop { not wheel in {LEFT, RIGHT} }"
+                - "globally: /mobile_base/events/wheel_drop forbids /mobile_base/events/wheel_drop within 100 ms"
+                ################################################################
+                # properties
+                - "globally: no /cmd_vel_mux/safety_controller { linear.x > 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /cmd_vel_mux/safety_controller { not linear.x = 0.0 }"
+                - "globally: /cmd_vel_mux/safety_controller { linear.x = 0.0 } requires /mobile_base/events/wheel_drop { state = DROPPED }"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /cmd_vel_mux/safety_controller { linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper { state = PRESSED } causes /cmd_vel_mux/safety_controller { linear.x < 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } forbids /cmd_vel_mux/safety_controller { not linear.x = 0.0 } within 100 ms"
+                ################################################################
+                # mutants
+                - "globally: no /cmd_vel_mux/safety_controller"
+                - "globally: no /cmd_vel_mux/safety_controller { linear.x < 0.0 }"
+                - "globally: no /cmd_vel_mux/safety_controller { linear.x = 0.0 }"
+                - "globally: no /cmd_vel_mux/safety_controller { not linear.x > 0.0 }"
+                - "globally: some /cmd_vel_mux/safety_controller { linear.x > 0.0 } within 1000 ms"
+                - "globally: /mobile_base/events/bumper causes /cmd_vel_mux/safety_controller { linear.x > 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/cliff causes /cmd_vel_mux/safety_controller { linear.x > 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop causes /cmd_vel_mux/safety_controller { linear.x > 0.0 } within 100 ms"
+                - "after /mobile_base/events/wheel_drop as P until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /cmd_vel_mux/safety_controller { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /cmd_vel_mux/safety_controller"
+                - "after /mobile_base/events/wheel_drop as P { state = RAISED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /cmd_vel_mux/safety_controller { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = DROPPED and wheel = @P.wheel }: no /cmd_vel_mux/safety_controller { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and not wheel = @P.wheel }: no /cmd_vel_mux/safety_controller { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and not wheel = @P.wheel }: no /cmd_vel_mux/safety_controller { not linear.x > 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and not wheel = @P.wheel }: no /cmd_vel_mux/safety_controller { not linear.x < 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /cmd_vel_mux/safety_controller { linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: some /cmd_vel_mux/safety_controller { not linear.x = 0.0 } within 100 ms"
+                - "after /mobile_base/events/wheel_drop { state = DROPPED }: no /cmd_vel_mux/safety_controller { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: /mobile_base/events/bumper causes /cmd_vel_mux/safety_controller { not linear.x = 0.0 } within 100 ms"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: /mobile_base/events/cliff causes /cmd_vel_mux/safety_controller { not linear.x = 0.0 } within 100 ms"
+                - "globally: /cmd_vel_mux/safety_controller requires /mobile_base/events/wheel_drop { state = DROPPED }"
+                - "globally: /cmd_vel_mux/safety_controller { linear.x < 0.0 } requires /mobile_base/events/wheel_drop { state = DROPPED }"
+                - "globally: /cmd_vel_mux/safety_controller { linear.x = 0.0 } requires /mobile_base/events/wheel_drop { state = RAISED }"
+                - "globally: no /cmd_vel_mux/safety_controller { linear.x = 0.0 }"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } forbids /cmd_vel_mux/safety_controller { linear.x = 0.0 }"
+                - "globally: /mobile_base/events/wheel_drop causes /cmd_vel_mux/safety_controller { linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /cmd_vel_mux/safety_controller { linear.x = 0.0 and angular.z = 0.0 } within 50 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = RAISED } causes /cmd_vel_mux/safety_controller { linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /cmd_vel_mux/safety_controller { linear.x < 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /cmd_vel_mux/safety_controller { linear.x > 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /cmd_vel_mux/safety_controller { linear.x = 0.0 and angular.z < 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /cmd_vel_mux/safety_controller { linear.x = 0.0 and angular.z > 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /cmd_vel_mux/safety_controller { not linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /cmd_vel_mux/safety_controller { linear.x = 0.0 and not angular.z = 0.0 } within 100 ms"
+                - "globally: no /cmd_vel_mux/safety_controller { linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: some /cmd_vel_mux/safety_controller { linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } forbids /cmd_vel_mux/safety_controller { linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /cmd_vel_mux/safety_controller { linear.x = 0.0 and angular.z = 0.0 } requires /mobile_base/events/wheel_drop { state = DROPPED } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper causes /cmd_vel_mux/safety_controller { linear.x < 0.0 } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper { state = PRESSED } causes /cmd_vel_mux/safety_controller { linear.x < 0.0 } within 50 ms"
+                - "until /mobile_base/events/wheel_drop { state = RAISED }: /mobile_base/events/bumper { state = PRESSED } causes /cmd_vel_mux/safety_controller { linear.x < 0.0 } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper { state = RELEASED } causes /cmd_vel_mux/safety_controller { linear.x < 0.0 } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper { state = PRESSED } causes /cmd_vel_mux/safety_controller { linear.x = 0.0 } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper { state = PRESSED } causes /cmd_vel_mux/safety_controller { linear.x > 0.0 } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper { state = PRESSED } causes /cmd_vel_mux/safety_controller { not linear.x < 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/bumper { state = PRESSED } causes /cmd_vel_mux/safety_controller { linear.x < 0.0 } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: no /cmd_vel_mux/safety_controller { linear.x < 0.0 } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: some /cmd_vel_mux/safety_controller { linear.x < 0.0 } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper { state = PRESSED } forbids /cmd_vel_mux/safety_controller { linear.x < 0.0 } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /cmd_vel_mux/safety_controller { linear.x < 0.0 } requires /mobile_base/events/bumper { state = PRESSED } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop forbids /cmd_vel_mux/safety_controller { not linear.x = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } forbids /cmd_vel_mux/safety_controller within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } forbids /cmd_vel_mux/safety_controller { not linear.x = 0.0 }"
+                - "globally: /mobile_base/events/wheel_drop { state = RAISED } forbids /cmd_vel_mux/safety_controller { not linear.x = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } forbids /cmd_vel_mux/safety_controller { not linear.x < 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } forbids /cmd_vel_mux/safety_controller { not linear.x > 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } forbids /cmd_vel_mux/safety_controller { linear.x = 0.0 } within 100 ms"
+                - "globally: no /cmd_vel_mux/safety_controller { not linear.x = 0.0 } within 100 ms"
+                - "globally: some /cmd_vel_mux/safety_controller { not linear.x = 0.0 } within 100 ms"
+        user_data:
+            haros_plugin_pbt_gen:
+                deadline: 3.0
+                extra_monitors: false
+                max_examples: 150
+                slack: 0.005
+    random_walker_node:
+        launch:
+            - hpl_test/launch/random_walker_node.launch
+        hpl:
+            properties:
+                ################################################################
+                # axioms
+                - "globally: no /kobuki_random_walker_controller/enable"
+                - "globally: no /kobuki_random_walker_controller/disable"
+                - "globally: no /mobile_base/events/bumper { not state in {PRESSED, RELEASED} }"
+                - "globally: no /mobile_base/events/bumper { not bumper in {LEFT, CENTER, RIGHT} }"
+                - "globally: /mobile_base/events/bumper forbids /mobile_base/events/bumper within 100 ms"
+                - "globally: no /mobile_base/events/cliff { not state in {CLIFF, FLOOR} }"
+                - "globally: no /mobile_base/events/cliff { not sensor in {LEFT, CENTER, RIGHT} }"
+                - "globally: /mobile_base/events/cliff forbids /mobile_base/events/cliff within 100 ms"
+                - "globally: no /mobile_base/events/wheel_drop { not state in {DROPPED, RAISED} }"
+                - "globally: no /mobile_base/events/wheel_drop { not wheel in {LEFT, RIGHT} }"
+                - "globally: /mobile_base/events/wheel_drop forbids /mobile_base/events/wheel_drop within 100 ms"
+                ################################################################
+                # properties
+                - "globally: no /cmd_vel_mux/random_walker { linear.x > 0.1 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /cmd_vel_mux/random_walker { not linear.x = 0.0 }"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper { state = PRESSED } causes /mobile_base/commands/led1 { value = ORANGE } within 100 ms"
+                - "globally: some /cmd_vel_mux/random_walker within 500 ms"
+                ################################################################
+                # mutants
+                - "globally: no /cmd_vel_mux/random_walker"
+                - "globally: no /cmd_vel_mux/random_walker { linear.x < 0.1 }"
+                - "globally: no /cmd_vel_mux/random_walker { linear.x = 0.1 }"
+                - "globally: no /cmd_vel_mux/random_walker { not linear.x > 0.1 }"
+                - "globally: some /cmd_vel_mux/random_walker { linear.x > 0.1 } within 1000 ms"
+                - "globally: /mobile_base/events/bumper causes /cmd_vel_mux/random_walker { linear.x > 0.1 } within 100 ms"
+                - "globally: /mobile_base/events/cliff causes /cmd_vel_mux/random_walker { linear.x > 0.1 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop causes /cmd_vel_mux/random_walker { linear.x > 0.1 } within 100 ms"
+                - "after /mobile_base/events/wheel_drop as P until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /cmd_vel_mux/random_walker { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /cmd_vel_mux/random_walker"
+                - "after /mobile_base/events/wheel_drop as P { state = RAISED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /cmd_vel_mux/random_walker { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = DROPPED and wheel = @P.wheel }: no /cmd_vel_mux/random_walker { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and not wheel = @P.wheel }: no /cmd_vel_mux/random_walker { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /cmd_vel_mux/random_walker { linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED }: no /cmd_vel_mux/random_walker { not linear.x = 0.0 }"
+                - "globally: no /cmd_vel_mux/random_walker { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: some /cmd_vel_mux/random_walker { not linear.x = 0.0 } within 100 ms"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: /mobile_base/events/bumper causes /cmd_vel_mux/random_walker { not linear.x = 0.0 } within 100 ms"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: /mobile_base/events/cliff causes /cmd_vel_mux/random_walker { not linear.x = 0.0 } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper causes /mobile_base/commands/led1 { value = ORANGE } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper { state = PRESSED } causes /mobile_base/commands/led1 { value = ORANGE } within 50 ms"
+                - "until /mobile_base/events/wheel_drop { state = RAISED }: /mobile_base/events/bumper { state = PRESSED } causes /mobile_base/commands/led1 { value = ORANGE } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper { state = RELEASED } causes /mobile_base/commands/led1 { value = ORANGE } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper { state = PRESSED } causes /mobile_base/commands/led1 { value = BLACK } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper { state = PRESSED } causes /mobile_base/commands/led1 { value = RED } within 100 ms"
+                - "globally: /mobile_base/events/bumper { state = PRESSED } causes /mobile_base/commands/led1 { value = ORANGE } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: no /mobile_base/commands/led1 { value = ORANGE } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: some /mobile_base/commands/led1 { value = ORANGE } within 100 ms"
+                - "until /mobile_base/events/wheel_drop { state = DROPPED }: /mobile_base/events/bumper { state = PRESSED } forbids /mobile_base/commands/led1 { value = ORANGE } within 100 ms"
+                - "globally: some /cmd_vel_mux/random_walker within 50 ms"
+                - "globally: no /cmd_vel_mux/random_walker within 500 ms"
+                - "globally: /mobile_base/events/bumper forbids /cmd_vel_mux/random_walker within 500 ms"
+                - "globally: /mobile_base/events/cliff forbids /cmd_vel_mux/random_walker within 500 ms"
+                - "globally: /mobile_base/events/wheel_drop forbids /cmd_vel_mux/random_walker within 500 ms"
+        user_data:
+            haros_plugin_pbt_gen:
+                deadline: 3.0
+                extra_monitors: false
+                max_examples: 150
+                slack: 0.005
+    multiplexer_node:
+        launch:
+            - hpl_test/launch/multiplexer_node.launch
+        hints:
+            nodes:
+                /cmd_vel_mux:
+                    publishers:
+                        -   topic: /cmd_vel_mux/?
+                            original_name: /cmd_vel_mux/output/cmd_vel
+                            conditional: false
+                        -   topic: /cmd_vel_mux/parameter_descriptions 
+                            create: true
+                            msg_type: dynamic_reconfigure/ConfigDescription
+                            queue_size: 1
+                            latched: true
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                        -   topic: /cmd_vel_mux/parameter_updates
+                            create: true
+                            msg_type: dynamic_reconfigure/Config
+                            queue_size: 1
+                            latched: true
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                    subscribers:
+                        -   topic: /cmd_vel_mux/?
+                            original_name: /cmd_vel_mux/safety_controller
+                            conditional: false
+                        -   topic: /cmd_vel_mux/random_walker
+                            create: true
+                            msg_type: geometry_msgs/Twist
+                            queue_size: 10
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 207
+                                column: 11
+                    servers:
+                        -   service: /cmd_vel_mux/set_parameters
+                            create: true
+                            srv_type: dynamic_reconfigure/Reconfigure
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                    setters:
+                        -   parameter: /cmd_vel_mux/yaml_cfg_file
+                            create: true
+                            param_type: str
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                        -   parameter: /cmd_vel_mux/yaml_cfg_data
+                            create: true
+                            param_type: str
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                    getters:
+                        -   parameter: /cmd_vel_mux/yaml_cfg_file
+                            conditional: false
+                        -   parameter: /cmd_vel_mux/yaml_cfg_file
+                            create: true
+                            param_type: str
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                        -   parameter: /cmd_vel_mux/yaml_cfg_data
+                            create: true
+                            param_type: str
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+        hpl:
+            properties:
+                ################################################################
+                # axioms
+                - "globally: /cmd_vel_mux/safety_controller forbids /cmd_vel_mux/safety_controller within 100 ms"
+                - "globally: /cmd_vel_mux/random_walker forbids /cmd_vel_mux/random_walker within 100 ms"
+                ################################################################
+                # properties
+                - "globally: /cmd_vel_mux/safety_controller as A causes /mobile_base/commands/velocity { linear.x = @A.linear.x and angular.z = @A.angular.z } within 100 ms"
+                - "until /cmd_vel_mux/safety_controller: /cmd_vel_mux/random_walker as A causes /mobile_base/commands/velocity { linear.x = @A.linear.x and angular.z = @A.angular.z } within 100 ms"
+                ################################################################
+                # mutants
+                - "globally: /cmd_vel_mux/random_walker as A causes /mobile_base/commands/velocity { linear.x = @A.linear.x and angular.z = @A.angular.z } within 100 ms"
+                - "globally: /cmd_vel_mux/safety_controller as A causes /mobile_base/commands/velocity { linear.x < @A.linear.x and angular.z = @A.angular.z } within 100 ms"
+                - "globally: /cmd_vel_mux/safety_controller as A causes /mobile_base/commands/velocity { linear.x > @A.linear.x and angular.z = @A.angular.z } within 100 ms"
+                - "globally: /cmd_vel_mux/safety_controller as A causes /mobile_base/commands/velocity { linear.x = @A.linear.x and angular.z < @A.angular.z } within 100 ms"
+                - "globally: /cmd_vel_mux/safety_controller as A causes /mobile_base/commands/velocity { linear.x = @A.linear.x and angular.z > @A.angular.z } within 100 ms"
+                - "globally: /cmd_vel_mux/safety_controller as A causes /mobile_base/commands/velocity { not linear.x = @A.linear.x and angular.z = @A.angular.z } within 100 ms"
+                - "globally: /cmd_vel_mux/safety_controller as A causes /mobile_base/commands/velocity { linear.x = @A.linear.x and not angular.z = @A.angular.z } within 100 ms"
+                - "globally: /cmd_vel_mux/safety_controller as A forbids /mobile_base/commands/velocity { linear.x = @A.linear.x and angular.z = @A.angular.z } within 100 ms"
+                - "globally: /mobile_base/commands/velocity as B requires /cmd_vel_mux/safety_controller { linear.x = @B.linear.x and angular.z = @B.angular.z } within 100 ms"
+                - "globally: /cmd_vel_mux/random_walker as A causes /mobile_base/commands/velocity { linear.x = @A.linear.x and angular.z = @A.angular.z } within 100 ms"
+                - "until /cmd_vel_mux/safety_controller: /cmd_vel_mux/random_walker as A causes /mobile_base/commands/velocity { linear.x < @A.linear.x and angular.z = @A.angular.z } within 100 ms"
+                - "until /cmd_vel_mux/safety_controller: /cmd_vel_mux/random_walker as A causes /mobile_base/commands/velocity { linear.x > @A.linear.x and angular.z = @A.angular.z } within 100 ms"
+                - "until /cmd_vel_mux/safety_controller: /cmd_vel_mux/random_walker as A causes /mobile_base/commands/velocity { linear.x = @A.linear.x and angular.z < @A.angular.z } within 100 ms"
+                - "until /cmd_vel_mux/safety_controller: /cmd_vel_mux/random_walker as A causes /mobile_base/commands/velocity { linear.x = @A.linear.x and angular.z > @A.angular.z } within 100 ms"
+                - "until /cmd_vel_mux/safety_controller: /cmd_vel_mux/random_walker as A causes /mobile_base/commands/velocity { not linear.x = @A.linear.x and angular.z = @A.angular.z } within 100 ms"
+                - "until /cmd_vel_mux/safety_controller: /cmd_vel_mux/random_walker as A causes /mobile_base/commands/velocity { linear.x = @A.linear.x and not angular.z = @A.angular.z } within 100 ms"
+                - "until /cmd_vel_mux/safety_controller: /cmd_vel_mux/random_walker as A forbids /mobile_base/commands/velocity { linear.x = @A.linear.x and angular.z = @A.angular.z } within 100 ms"
+        user_data:
+            haros_plugin_pbt_gen:
+                deadline: 3.0
+                extra_monitors: false
+                max_examples: 150
+                slack: 0.005
+    random_walker_system:
+        launch:
+            - hpl_test/launch/random_walker_system.launch
+        hints:
+            nodes:
+                /cmd_vel_mux:
+                    publishers:
+                        -   topic: /cmd_vel_mux/?
+                            original_name: /cmd_vel_mux/output/cmd_vel
+                            conditional: false
+                        -   topic: /cmd_vel_mux/parameter_descriptions 
+                            create: true
+                            msg_type: dynamic_reconfigure/ConfigDescription
+                            queue_size: 1
+                            latched: true
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                        -   topic: /cmd_vel_mux/parameter_updates
+                            create: true
+                            msg_type: dynamic_reconfigure/Config
+                            queue_size: 1
+                            latched: true
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                    subscribers:
+                        -   topic: /cmd_vel_mux/?
+                            original_name: /cmd_vel_mux/safety_controller
+                            conditional: false
+                        -   topic: /cmd_vel_mux/random_walker
+                            create: true
+                            msg_type: geometry_msgs/Twist
+                            queue_size: 10
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 207
+                                column: 11
+                    servers:
+                        -   service: /cmd_vel_mux/set_parameters
+                            create: true
+                            srv_type: dynamic_reconfigure/Reconfigure
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                    setters:
+                        -   parameter: /cmd_vel_mux/yaml_cfg_file
+                            create: true
+                            param_type: str
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                        -   parameter: /cmd_vel_mux/yaml_cfg_data
+                            create: true
+                            param_type: str
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                    getters:
+                        -   parameter: /cmd_vel_mux/yaml_cfg_file
+                            conditional: false
+                        -   parameter: /cmd_vel_mux/yaml_cfg_file
+                            create: true
+                            param_type: str
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+                        -   parameter: /cmd_vel_mux/yaml_cfg_data
+                            create: true
+                            param_type: str
+                            traceability:
+                                package: yocs_cmd_vel_mux
+                                file: src/cmd_vel_mux_nodelet.cpp
+                                line: 96
+                                column: 32
+        hpl:
+            properties:
+                ################################################################
+                # axioms
+                - "globally: no /kobuki_safety_controller/reset"
+                - "globally: no /kobuki_safety_controller/enable"
+                - "globally: no /kobuki_safety_controller/disable"
+                - "globally: no /kobuki_random_walker_controller/enable"
+                - "globally: no /kobuki_random_walker_controller/disable"
+                - "globally: no /mobile_base/events/bumper {not state in {PRESSED, RELEASED}}"
+                - "globally: no /mobile_base/events/bumper {not bumper in {LEFT, CENTER, RIGHT}}"
+                - "globally: /mobile_base/events/bumper forbids /mobile_base/events/bumper within 100 ms"
+                - "globally: no /mobile_base/events/cliff {not state in {CLIFF, FLOOR}}"
+                - "globally: no /mobile_base/events/cliff {not sensor in {LEFT, CENTER, RIGHT}}"
+                - "globally: /mobile_base/events/cliff forbids /mobile_base/events/cliff within 100 ms"
+                - "globally: no /mobile_base/events/wheel_drop {not state in {DROPPED, RAISED}}"
+                - "globally: no /mobile_base/events/wheel_drop {not wheel in {LEFT, RIGHT}}"
+                - "globally: /mobile_base/events/wheel_drop forbids /mobile_base/events/wheel_drop within 100 ms"
+                ################################################################
+                # properties
+                - "globally: no /mobile_base/commands/velocity { linear.x < -0.1 }"
+                - "globally: /mobile_base/commands/velocity { linear.x = 0.0 } requires /mobile_base/events/wheel_drop { state = DROPPED }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /mobile_base/commands/velocity { not linear.x = 0.0 }"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /mobile_base/commands/velocity { linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: some /mobile_base/commands/velocity within 500 ms"
+                ################################################################
+                # mutants
+                - "globally: no /mobile_base/commands/velocity"
+                - "globally: no /mobile_base/commands/velocity { linear.x > -0.1 }"
+                - "globally: no /mobile_base/commands/velocity { linear.x = -0.1 }"
+                - "globally: no /mobile_base/commands/velocity { not linear.x < -0.1 }"
+                - "globally: some /mobile_base/commands/velocity { linear.x < -0.1 }"
+                - "globally: /mobile_base/events/bumper causes /mobile_base/commands/velocity { linear.x < -0.1 } within 100 ms"
+                - "globally: /mobile_base/events/cliff causes /mobile_base/commands/velocity { linear.x < -0.1 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop causes /mobile_base/commands/velocity { linear.x < -0.1 } within 100 ms"
+                - "globally: /mobile_base/commands/velocity requires /mobile_base/events/wheel_drop { state = DROPPED }"
+                - "globally: /mobile_base/commands/velocity { linear.x < 0.0 } requires /mobile_base/events/wheel_drop { state = DROPPED }"
+                - "globally: /mobile_base/commands/velocity { linear.x > 0.0 } requires /mobile_base/events/wheel_drop { state = DROPPED }"
+                - "globally: /mobile_base/commands/velocity { not linear.x = 0.0 } requires /mobile_base/events/wheel_drop { state = DROPPED }"
+                - "globally: /mobile_base/commands/velocity { linear.x = 0.0 } requires /mobile_base/events/wheel_drop { state = RAISED }"
+                - "globally: no /mobile_base/commands/velocity { linear.x = 0.0 }"
+                - "globally: some /mobile_base/commands/velocity { linear.x = 0.0 } within 1000 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } forbids /mobile_base/commands/velocity { linear.x = 0.0 } within 100 ms"
+                - "after /mobile_base/events/wheel_drop as P until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /mobile_base/commands/velocity { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /mobile_base/commands/velocity"
+                - "after /mobile_base/events/wheel_drop as P { state = RAISED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /mobile_base/commands/velocity { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = DROPPED and wheel = @P.wheel }: no /mobile_base/commands/velocity { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and not wheel = @P.wheel }: no /mobile_base/commands/velocity { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: no /mobile_base/commands/velocity { linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED }: no /mobile_base/commands/velocity { not linear.x = 0.0 }"
+                - "globally: no /mobile_base/commands/velocity { not linear.x = 0.0 }"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: some /mobile_base/commands/velocity { not linear.x = 0.0 } within 1000 ms"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: /mobile_base/events/bumper causes /mobile_base/commands/velocity { not linear.x = 0.0 } within 100 ms"
+                - "after /mobile_base/events/wheel_drop as P { state = DROPPED } until /mobile_base/events/wheel_drop { state = RAISED and wheel = @P.wheel }: /mobile_base/events/cliff causes /mobile_base/commands/velocity { not linear.x = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop causes /mobile_base/commands/velocity { linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /mobile_base/commands/velocity { linear.x = 0.0 and angular.z = 0.0 } within 50 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = RAISED } causes /mobile_base/commands/velocity { linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /mobile_base/commands/velocity { linear.x < 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /mobile_base/commands/velocity { linear.x > 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /mobile_base/commands/velocity { linear.x = 0.0 and angular.z < 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /mobile_base/commands/velocity { linear.x = 0.0 and angular.z > 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /mobile_base/commands/velocity { not linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } causes /mobile_base/commands/velocity { linear.x = 0.0 and not angular.z = 0.0 } within 100 ms"
+                - "globally: no /mobile_base/commands/velocity { linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: some /mobile_base/commands/velocity { linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /mobile_base/events/wheel_drop { state = DROPPED } forbids /mobile_base/commands/velocity { linear.x = 0.0 and angular.z = 0.0 } within 100 ms"
+                - "globally: /mobile_base/commands/velocity { linear.x = 0.0 and angular.z = 0.0 } requires /mobile_base/events/wheel_drop { state = DROPPED } within 100 ms"
+                - "globally: some /mobile_base/commands/velocity within 50 ms"
+                - "globally: no /mobile_base/commands/velocity within 500 ms"
+                - "globally: /mobile_base/events/bumper forbids /mobile_base/commands/velocity within 500 ms"
+                - "globally: /mobile_base/events/cliff forbids /mobile_base/commands/velocity within 500 ms"
+                - "globally: /mobile_base/events/wheel_drop forbids /mobile_base/commands/velocity within 500 ms"
+        user_data:
+            haros_plugin_pbt_gen:
+                deadline: 3.0
+                extra_monitors: false
+                max_examples: 150
+                slack: 0.005

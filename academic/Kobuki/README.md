@@ -23,21 +23,41 @@ Various versions of HAROS were used, from 3.0 to 3.9.
 
 ## Analysis
 
-Kobuki has been the go-to example to try out practically every feature of HAROS available at the time of writing.
+Kobuki has been the go-to example to try out most features of HAROS available at the time of writing.
 As such, it has been analysed in terms of:
 
 - compliance with coding standards;
 - compliance with code quality metrics standards;
 - automatic model extraction;
 - architectural queries;
-- runtime verification;
-- property-based testing;
-- model checking.
+- property-based testing (and runtime verification).
 
 In the following subsections we provide further details on our approach to the various themes.
 The files found under the [`json` directory](./json/) can be copied to the HAROS viz's `data` directory for visualisation.
 
 ### Code Quality Analysis
+
+We ran a standard code quality analysis over the source code of Kobuki (see the [project file](./projects/code-quality.yaml), including both compliance with coding standards and internal quality metrics.
+
+The analysis found over 1500 issues, most of which related to coding standards and code formatting.
+Many of the metrics-related issues are instances of functions that are too long or too complex (as per the definition of cyclomatic complexity).
+
+We took no steps to fix any of the issues.
+The goal was simply to build the internal quality profile.
+
+The following table sums up the analysis and its results.
+
+| Metric            | Value |
+| :---------------- | :---: |
+| Packages          | 8     |
+| C++ lines         | 5.3K  |
+| Pkg. dependencies | 27    |
+| Analysis plugins  | 6     |
+| Total rules       | 150   |
+| Violated rules    | 48    |
+| Total issues      | 1570  |
+| Coding issues     | 1517  |
+| Metrics issues    | 81    |
 
 ### Model Extraction and Architectural Analysis
 
@@ -325,6 +345,3 @@ Curiously, neither of the non-minimal counterexamples is associated with the two
 | Setup/Teardown time (s)     | 3.167 | 0.535          | 3.001  |
 | Input trace size (messages) | 1     | 1              | 1      |
 | Excess Messages             | 0     | 0              | 0      |
-
-### Model Checking
-

@@ -1,0 +1,17 @@
+[
+  {
+    "packages":[
+      "agrob_topologic_graph",
+      "itrci_hardware",
+      "itrci_miscellaneous",
+      "itrci_nav",
+      "laser_to_pcl",
+      "octo_to_pcl",
+      "pub_init_goal_pose",
+      "Agrob_path",
+      "agrob_topologic_ros"
+    ],
+    "repositories":[],
+    "id":"Agrob_PP"
+  }
+]

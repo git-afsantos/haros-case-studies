@@ -1,0 +1,15 @@
+[
+  {
+    "comment":"Query found: RosPrimitiveCall(/map, ~, nav_msgs/OccupancyGrid) Location2(package='agrob_topologic_ros', file='src/topologic-map-node.cpp', line=80, column=17) (depth 1)\nReported in agrob_topologic_ros/src/topologic-map-node.cpp:80:17",
+    "resources":[],
+    "location":{
+      "function":null,
+      "package":"agrob_topologic_ros",
+      "column":17,
+      "file":"src/topologic-map-node.cpp",
+      "line":80,
+      "class":null
+    },
+    "rule":"no_global_names"
+  }
+]

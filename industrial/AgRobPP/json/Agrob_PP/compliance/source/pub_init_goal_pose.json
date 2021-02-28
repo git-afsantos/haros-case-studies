@@ -1,0 +1,41 @@
+[
+  {
+    "comment":"Query found: RosPrimitiveCall(/Agrob_path/goalPose, ~, geometry_msgs/PoseStamped) Location2(package='pub_init_goal_pose', file='src/pub_init_goal_pose_node.cpp', line=35, column=20) (depth 0)\nReported in pub_init_goal_pose/src/pub_init_goal_pose_node.cpp:35:20",
+    "resources":[],
+    "location":{
+      "function":null,
+      "package":"pub_init_goal_pose",
+      "column":20,
+      "file":"src/pub_init_goal_pose_node.cpp",
+      "line":35,
+      "class":null
+    },
+    "rule":"no_global_names"
+  },
+  {
+    "comment":"Query found: RosPrimitiveCall(/Agrob_path/initialPose, ~, geometry_msgs/PoseWithCovarianceStamped) Location2(package='pub_init_goal_pose', file='src/pub_init_goal_pose_node.cpp', line=37, column=23) (depth 0)\nReported in pub_init_goal_pose/src/pub_init_goal_pose_node.cpp:37:23",
+    "resources":[],
+    "location":{
+      "function":null,
+      "package":"pub_init_goal_pose",
+      "column":23,
+      "file":"src/pub_init_goal_pose_node.cpp",
+      "line":37,
+      "class":null
+    },
+    "rule":"no_global_names"
+  },
+  {
+    "comment":"Query found: RosPrimitiveCall(/map, ~, nav_msgs/OccupancyGrid) Location2(package='pub_init_goal_pose', file='src/pub_init_goal_pose_node.cpp', line=40, column=15) (depth 0)\nReported in pub_init_goal_pose/src/pub_init_goal_pose_node.cpp:40:15",
+    "resources":[],
+    "location":{
+      "function":null,
+      "package":"pub_init_goal_pose",
+      "column":15,
+      "file":"src/pub_init_goal_pose_node.cpp",
+      "line":40,
+      "class":null
+    },
+    "rule":"no_global_names"
+  }
+]

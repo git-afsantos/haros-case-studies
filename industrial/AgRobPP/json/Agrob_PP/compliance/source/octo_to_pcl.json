@@ -1,0 +1,41 @@
+[
+  {
+    "comment":"Query found: RosPrimitiveCall(/octo_pcl, ~, sensor_msgs/PointCloud2) Location2(package='octo_to_pcl', file='src/octo_to_pcl_node.cpp', line=70, column=18) (depth 0)\nReported in octo_to_pcl/src/octo_to_pcl_node.cpp:70:18",
+    "resources":[],
+    "location":{
+      "function":null,
+      "package":"octo_to_pcl",
+      "column":18,
+      "file":"src/octo_to_pcl_node.cpp",
+      "line":70,
+      "class":null
+    },
+    "rule":"no_global_names"
+  },
+  {
+    "comment":"Query found: RosPrimitiveCall(/surface_pcl, ~, sensor_msgs/PointCloud2) Location2(package='octo_to_pcl', file='src/octo_to_pcl_node.cpp', line=71, column=25) (depth 0)\nReported in octo_to_pcl/src/octo_to_pcl_node.cpp:71:25",
+    "resources":[],
+    "location":{
+      "function":null,
+      "package":"octo_to_pcl",
+      "column":25,
+      "file":"src/octo_to_pcl_node.cpp",
+      "line":71,
+      "class":null
+    },
+    "rule":"no_global_names"
+  },
+  {
+    "comment":"Query found: RosPrimitiveCall(/corner_pcl, ~, sensor_msgs/PointCloud2) Location2(package='octo_to_pcl', file='src/octo_to_pcl_node.cpp', line=72, column=24) (depth 0)\nReported in octo_to_pcl/src/octo_to_pcl_node.cpp:72:24",
+    "resources":[],
+    "location":{
+      "function":null,
+      "package":"octo_to_pcl",
+      "column":24,
+      "file":"src/octo_to_pcl_node.cpp",
+      "line":72,
+      "class":null
+    },
+    "rule":"no_global_names"
+  }
+]

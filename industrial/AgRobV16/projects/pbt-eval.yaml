@@ -1,0 +1,397 @@
+%YAML 1.1
+---
+project: AgRob V16 Property-based Testing
+packages:
+    - agrobv16_bringup
+    - agrobv16_supervisor
+    - agrob_joy
+    - agrob_supervisor
+    - agrob_safety
+    - agrobv16_map_server
+    - agrob_red_map
+    - agrob_path_planning_stack
+    - Agrob_path
+    - hpl_test
+configurations:
+    agrob_joy_node:
+        launch:
+            - hpl_test/launch/agrob_joy_node.launch
+        hpl:
+            properties:
+                ################################################################
+                # axioms
+                - "globally: no /joy_teleop/joy {not buttons[0] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[1] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[2] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[3] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[4] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[5] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[6] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[7] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[8] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[9] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[10] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not axes[0] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[1] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[2] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[3] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[4] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[5] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[6] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[7] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/cmd_vel {not linear.x in [-0.4 to 0.4]}"
+                - "globally: no /joy_teleop/cmd_vel {not angular.z in [-0.6 to 0.6]}"
+                ################################################################
+                # properties
+                - "globally: no /agrob/agrob_mode {not mode in {0,1,2,3}}"
+                - "globally: /agrob/agrob_mode {mode = 2} requires /joy_teleop/joy {axes[5] = -1.0 and axes[2] = -1.0}"
+                - "after /joy_teleop/joy {axes[5] > -1.0} until /joy_teleop/joy {axes[5] = -1.0}: no /agrob/cmd_vel_joy {not twist.linear.x = 0.0}"
+                ################################################################
+                # mutants
+                - "globally: no /agrob/agrob_mode"
+                - "globally: no /agrob/agrob_mode {mode in {0,1,2,3}}"
+                - "globally: no /agrob/agrob_mode {not mode in {1,2,3}}"
+                - "globally: some /agrob/agrob_mode {not mode in {0,1,2,3}} within 1000 ms"
+                - "globally: /joy_teleop/joy causes /agrob/agrob_mode {not mode in {0,1,2,3}} within 1000 ms"
+                - "globally: /joy_teleop/cmd_vel causes /agrob/agrob_mode {not mode in {0,1,2,3}} within 1000 ms"
+                - "globally: /agrob/agrob_mode {mode = 2} requires /joy_teleop/joy {axes[5] = -1.0 and axes[2] = -1.0} within 100 ms"
+                - "globally: /agrob/agrob_mode requires /joy_teleop/joy {axes[5] = -1.0 and axes[2] = -1.0}"
+                - "globally: /agrob/agrob_mode {mode < 2} requires /joy_teleop/joy {axes[5] = -1.0 and axes[2] = -1.0}"
+                - "globally: /agrob/agrob_mode {mode > 2} requires /joy_teleop/joy {axes[5] = -1.0 and axes[2] = -1.0}"
+                - "globally: /agrob/agrob_mode {not mode = 2} requires /joy_teleop/joy {axes[5] = -1.0 and axes[2] = -1.0}"
+                - "globally: /agrob/agrob_mode {mode = 2} requires /joy_teleop/joy {axes[5] > -1.0 and axes[2] = -1.0}"
+                - "globally: /agrob/agrob_mode {mode = 2} requires /joy_teleop/joy {axes[5] = -1.0 and axes[2] > -1.0}"
+                - "globally: no /agrob/agrob_mode {mode = 2}"
+                - "globally: some /agrob/agrob_mode {mode = 2} within 1000 ms"
+                - "globally: /joy_teleop/joy {axes[5] = -1.0 and axes[2] = -1.0} causes /agrob/agrob_mode {mode = 2} within 100 ms"
+                - "globally: /joy_teleop/joy {axes[5] = -1.0 and axes[2] = -1.0} forbids /agrob/agrob_mode {mode = 2} within 100 ms"
+                - "after /joy_teleop/joy until /joy_teleop/joy {axes[5] = -1.0}: no /agrob/cmd_vel_joy {not twist.linear.x = 0.0}"
+                - "after /joy_teleop/joy {axes[5] > -1.0} until /joy_teleop/joy {axes[5] = -1.0}: no /agrob/cmd_vel_joy"
+                - "after /joy_teleop/joy {axes[5] = -1.0} until /joy_teleop/joy {axes[5] = -1.0}: no /agrob/cmd_vel_joy {not twist.linear.x = 0.0}"
+                - "after /joy_teleop/joy {axes[5] > -1.0} until /joy_teleop/joy {axes[5] > -1.0}: no /agrob/cmd_vel_joy {not twist.linear.x = 0.0}"
+                - "after /joy_teleop/joy {axes[5] > -1.0} until /joy_teleop/joy {axes[5] = -1.0}: no /agrob/cmd_vel_joy {not twist.linear.x < 0.0}"
+                - "after /joy_teleop/joy {axes[5] > -1.0} until /joy_teleop/joy {axes[5] = -1.0}: no /agrob/cmd_vel_joy {not twist.linear.x > 0.0}"
+                - "after /joy_teleop/joy {axes[5] > -1.0} until /joy_teleop/joy {axes[5] = -1.0}: no /agrob/cmd_vel_joy {twist.linear.x = 0.0}"
+                - "after /joy_teleop/joy {axes[5] > -1.0}: no /agrob/cmd_vel_joy {not twist.linear.x = 0.0}"
+                - "globally: no /agrob/cmd_vel_joy {not twist.linear.x = 0.0}"
+                - "after /joy_teleop/joy {axes[5] > -1.0} until /joy_teleop/joy {axes[5] = -1.0}: some /agrob/cmd_vel_joy {not twist.linear.x = 0.0} within 1000 ms"
+                - "after /joy_teleop/joy {axes[5] > -1.0} until /joy_teleop/joy {axes[5] = -1.0}: /joy_teleop/joy causes /agrob/cmd_vel_joy {not twist.linear.x = 0.0} within 100 ms"
+                - "after /joy_teleop/joy {axes[5] > -1.0} until /joy_teleop/joy {axes[5] = -1.0}: /joy_teleop/cmd_vel causes /agrob/cmd_vel_joy {not twist.linear.x = 0.0} within 100 ms"
+        user_data:
+            haros_plugin_pbt_gen:
+                deadline: 3.0
+                extra_monitors: false
+                max_examples: 200
+                slack: 0.005
+    agrob_safety_node:
+        launch:
+            - hpl_test/launch/agrob_safety_node.launch
+        hpl:
+            properties:
+                ################################################################
+                # axioms
+                - "globally: no /velodyne_points"
+                - "globally: no /scan {not range_min = 0.01}"
+                - "globally: no /scan {not range_max = 20.0}"
+                - "globally: no /scan {not scan_time = 0.02}"
+                - "globally: no /scan {not angle_min = -2.35619}"
+                - "globally: no /scan {not angle_max = 2.35619}"
+                - "globally: no /scan {not angle_increment = 0.785398}"
+                - "globally: no /scan {not time_increment = 0.0028571428571429}"
+                - "globally: no /scan {not len(ranges) = 7}"
+                - "globally: no /scan {not len(intensities) = 7}"
+                - "globally: no /scan {not ranges[3] in [0.01 to 20.0]}"
+                - "globally: no /lidar1/scan {not range_min = 0.01}"
+                - "globally: no /lidar1/scan {not range_max = 20.0}"
+                - "globally: no /lidar1/scan {not scan_time = 0.02}"
+                - "globally: no /lidar1/scan {not angle_min = -2.35619}"
+                - "globally: no /lidar1/scan {not angle_max = 2.35619}"
+                - "globally: no /lidar1/scan {not angle_increment = 0.785398}"
+                - "globally: no /lidar1/scan {not time_increment = 0.0028571428571429}"
+                - "globally: no /lidar1/scan {not len(ranges) = 7}"
+                - "globally: no /lidar1/scan {not len(intensities) = 7}"
+                - "globally: no /lidar1/scan {not ranges[3] in [0.01 to 20.0]}"
+                - "globally: no /darknet_ros/bounding_boxes {not len(bounding_boxes) = 2}"
+                - "globally: no /darknet_ros/bounding_boxes {not bounding_boxes[0].Class in {\"person\", \"other\"}}"
+                - "globally: no /darknet_ros/bounding_boxes {not bounding_boxes[1].Class in {\"other\", \"person\"}}"
+                - "globally: no /imu_um7/rpy {not vector.x in {0, 0.2181662, 0.436333}}"
+                - "globally: no /imu_um7/rpy {not vector.y in {0, 0.1309, 0.2618}}"
+                - "globally: no /imu_um7/rpy {not vector.z = 0.0}"
+                #- "globally: /darknet_ros/bounding_boxes forbids /darknet_ros/bounding_boxes within 50 ms"
+                #- "globally: /scan forbids /scan within 20 ms"
+                #- "globally: /lidar1/scan forbids /lidar1/scan within 20 ms"
+                ################################################################
+                # properties
+                - "globally: no /agrob/safe_mode {not safe_modes in {\"000\", \"002\", \"003\", \"009\", \"010\", \"012\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "until /imu_um7/rpy {vector.x < 0.436333 and vector.y < 0.2618}: /imu_um7/rpy forbids /agrob/safe_mode {not safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "until /imu_um7/rpy: no /agrob/safe_mode {safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "globally: some /agrob/safe_mode {safe_modes = \"000\"} within 3000 ms"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /agrob/safe_mode {safe_modes = \"000\"} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                ################################################################
+                # mutants
+                - "globally: no /agrob/safe_mode"
+                - "globally: no /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"003\", \"009\", \"010\", \"012\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "globally: some /agrob/safe_mode {not safe_modes in {\"000\", \"002\", \"003\", \"009\", \"010\", \"012\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} within 1000 ms"
+                - "globally: /scan causes /agrob/safe_mode {not safe_modes in {\"000\", \"002\", \"003\", \"009\", \"010\", \"012\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} within 100 ms"
+                - "globally: /lidar1/scan causes /agrob/safe_mode {not safe_modes in {\"000\", \"002\", \"003\", \"009\", \"010\", \"012\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} within 100 ms"
+                - "globally: /darknet_ros/bounding_boxes causes /agrob/safe_mode {not safe_modes in {\"000\", \"002\", \"003\", \"009\", \"010\", \"012\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} within 100 ms"
+                - "globally: /imu_um7/rpy causes /agrob/safe_mode {not safe_modes in {\"000\", \"002\", \"003\", \"009\", \"010\", \"012\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} within 100 ms"
+                - "until /imu_um7/rpy {vector.x < 0.436333 and vector.y < 0.2618}: /imu_um7/rpy forbids /agrob/safe_mode"
+                - "until /imu_um7/rpy {vector.x = 0.436333 and vector.y < 0.2618}: /imu_um7/rpy forbids /agrob/safe_mode {not safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "until /imu_um7/rpy {vector.x < 0.436333 and vector.y = 0.2618}: /imu_um7/rpy forbids /agrob/safe_mode {not safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "until /imu_um7/rpy {vector.x < 0.436333 and vector.y < 0.2618}: /imu_um7/rpy forbids /agrob/safe_mode {safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "globally: /imu_um7/rpy forbids /agrob/safe_mode {not safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "until /imu_um7/rpy {vector.x < 0.436333 and vector.y < 0.2618}: no /agrob/safe_mode {not safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "until /imu_um7/rpy {vector.x < 0.436333 and vector.y < 0.2618}: some /agrob/safe_mode {not safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}} within 1000 ms"
+                - "until /imu_um7/rpy {vector.x < 0.436333 and vector.y < 0.2618}: /imu_um7/rpy causes /agrob/safe_mode {not safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "until /imu_um7/rpy {vector.x < 0.436333 and vector.y < 0.2618}: /agrob/safe_mode {not safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}} requires /imu_um7/rpy"
+                - "until /imu_um7/rpy: no /agrob/safe_mode"
+                - "until /imu_um7/rpy: no /agrob/safe_mode {not safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "after /imu_um7/rpy: no /agrob/safe_mode {safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "globally: no /agrob/safe_mode {safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "until /imu_um7/rpy: some /agrob/safe_mode {safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}} within 1000 ms"
+                - "until /imu_um7/rpy: /scan causes /agrob/safe_mode {safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}} within 100 ms"
+                - "until /imu_um7/rpy: /lidar1/scan causes /agrob/safe_mode {safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}} within 100 ms"
+                - "until /imu_um7/rpy: /darknet_ros/bounding_boxes causes /agrob/safe_mode {safe_modes in {\"090\", \"092\", \"093\", \"099\", \"190\", \"192\", \"193\", \"199\"}} within 100 ms"
+                - "globally: some /agrob/safe_mode {safe_modes = \"000\"} within 100 ms"
+                - "globally: some /agrob/safe_mode {not safe_modes = \"000\"} within 3000 ms"
+                - "globally: no /agrob/safe_mode {safe_modes = \"000\"} within 3000 ms"
+                - "globally: /scan causes /agrob/safe_mode {safe_modes = \"000\"} within 100 ms"
+                - "globally: /lidar1/scan causes /agrob/safe_mode {safe_modes = \"000\"} within 100 ms"
+                - "globally: /imu_um7/rpy causes /agrob/safe_mode {safe_modes = \"000\"} within 100 ms"
+                - "globally: /darknet_ros/bounding_boxes causes /agrob/safe_mode {safe_modes = \"000\"} within 100 ms"
+                - "globally: /scan forbids /agrob/safe_mode {safe_modes = \"000\"} within 100 ms"
+                - "globally: /lidar1/scan forbids /agrob/safe_mode {safe_modes = \"000\"} within 100 ms"
+                - "globally: /imu_um7/rpy forbids /agrob/safe_mode {safe_modes = \"000\"} within 100 ms"
+                - "globally: /darknet_ros/bounding_boxes forbids /agrob/safe_mode {safe_modes = \"000\"} within 100 ms"
+                - "globally: /agrob/safe_mode {safe_modes = \"000\"} requires /scan within 100 ms"
+                - "globally: /agrob/safe_mode {safe_modes = \"000\"} requires /lidar1/scan within 100 ms"
+                - "globally: /agrob/safe_mode {safe_modes = \"000\"} requires /imu_um7/rpy within 100 ms"
+                - "globally: /agrob/safe_mode {safe_modes = \"000\"} requires /darknet_ros/bounding_boxes within 100 ms"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /agrob/safe_mode {safe_modes = \"000\"} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0} within 100 ms"
+                - "after /imu_um7/rpy: /agrob/safe_mode {safe_modes = \"000\"} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /agrob/safe_mode requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /agrob/safe_mode {not safe_modes = \"000\"} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /agrob/safe_mode {safe_modes = \"000\"} requires /imu_um7/rpy {vector.x < 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /agrob/safe_mode {safe_modes = \"000\"} requires /imu_um7/rpy {vector.y < 0 and vector.x = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /agrob/safe_mode {safe_modes = \"000\"} requires /imu_um7/rpy {vector.x > 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /agrob/safe_mode {safe_modes = \"000\"} requires /imu_um7/rpy {vector.y > 0 and vector.x = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /agrob/safe_mode {safe_modes = \"000\"} requires /imu_um7/rpy {not vector.x = 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /agrob/safe_mode {safe_modes = \"000\"} requires /imu_um7/rpy {vector.x = 0 and not vector.y = 0}"
+                - "until /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /agrob/safe_mode {safe_modes = \"000\"} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                - "globally: /agrob/safe_mode {safe_modes = \"000\"} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: no /agrob/safe_mode {safe_modes = \"000\"}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: some /agrob/safe_mode {safe_modes = \"000\"} within 1000 ms"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /imu_um7/rpy {vector.x = 0 and vector.y = 0} forbids /agrob/safe_mode {safe_modes = \"000\"} within 100 ms"
+        user_data:
+            haros_plugin_pbt_gen:
+                deadline: 3.0
+                extra_monitors: false
+                max_examples: 200
+                slack: 0.005
+    agrob_supervisor_node:
+        launch:
+            - hpl_test/launch/agrob_supervisor_node.launch
+        hints:
+            nodes:
+                /agrob_supervisor_node_1:
+                    publishers:
+                      - topic: /agrob_supervisor_node_1/?
+                        original_name: /agrob_supervisor_node_1/agrobv16/cmd_vel_supervisor
+        hpl:
+            properties:
+                ################################################################
+                # axioms
+                - "globally: no /astar_gps_goal"
+                - "globally: no /agrob/target"
+                - "globally: no /agrob/cmd_auto"
+                - "globally: no /fix"
+                - "globally: no /agrob_map/gps/filtered"
+                - "globally: no /agrob_map/imu/rpy"
+                - "globally: no /agrob/agrob_mode {not mode in {0, 1, 2, 3}}"
+                - "globally: no /agrob/safe_mode {not safe_mode = 0}"
+                - "globally: no /agrob/safe_mode {not safe_modes in {\"000\", \"002\", \"003\", \"009\", \"010\", \"012\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}}"
+                - "globally: /agrob/safe_mode forbids /agrob/safe_mode within 25 ms"
+                #- "globally: /agrob/cmd_vel_goto forbids /agrob/cmd_vel_goto within 100 ms"
+                #- "globally: /agrob/cmd_vel_joy forbids /agrob/cmd_vel_joy within 100 ms"
+                ################################################################
+                # properties
+                - "globally: no /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]}"
+                - "globally: no /husky_velocity_controller/cmd_vel {not angular.z in [-0.5 to 0.5]}"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: no /husky_velocity_controller/cmd_vel {linear.x > 0.0}"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: some /husky_velocity_controller/cmd_vel {not linear.x > 0.0} within 50 ms"
+                ################################################################
+                # mutants
+                - "globally: no /husky_velocity_controller/cmd_vel"
+                - "globally: no /husky_velocity_controller/cmd_vel {linear.x in [-0.25 to 0.5]}"
+                - "globally: some /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]} within 3000 ms"
+                - "globally: /agrob/agrob_mode causes /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]} within 100 ms"
+                - "globally: /agrob/safe_mode causes /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]} within 100 ms"
+                - "globally: /agrob/cmd_vel_goto causes /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]} within 100 ms"
+                - "globally: /agrob/cmd_vel_joy causes /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]} within 100 ms"
+                - "after /agrob/safe_mode until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: no /husky_velocity_controller/cmd_vel {linear.x > 0.0}"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: no /husky_velocity_controller/cmd_vel"
+                - "after /agrob/safe_mode {not safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: no /husky_velocity_controller/cmd_vel {linear.x > 0.0}"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {not safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: no /husky_velocity_controller/cmd_vel {linear.x > 0.0}"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: no /husky_velocity_controller/cmd_vel {linear.x < 0.0}"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: no /husky_velocity_controller/cmd_vel {linear.x = 0.0}"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: no /husky_velocity_controller/cmd_vel {not linear.x > 0.0}"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}}: no /husky_velocity_controller/cmd_vel {linear.x > 0.0}"
+                - "until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: no /husky_velocity_controller/cmd_vel {linear.x > 0.0}"
+                - "globally: no /husky_velocity_controller/cmd_vel {linear.x > 0.0}"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: some /husky_velocity_controller/cmd_vel {linear.x > 0.0} within 1000 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: /agrob/agrob_mode causes /husky_velocity_controller/cmd_vel {linear.x > 0.0} within 100 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: /agrob/safe_mode causes /husky_velocity_controller/cmd_vel {linear.x > 0.0} within 100 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: /agrob/cmd_vel_goto causes /husky_velocity_controller/cmd_vel {linear.x > 0.0} within 100 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: /agrob/cmd_vel_joy causes /husky_velocity_controller/cmd_vel {linear.x > 0.0} within 100 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: some /husky_velocity_controller/cmd_vel {not linear.x > 0.0} within 10 ms"
+                - "after /agrob/safe_mode until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: some /husky_velocity_controller/cmd_vel {not linear.x > 0.0} within 50 ms"
+                - "after /agrob/safe_mode {not safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: some /husky_velocity_controller/cmd_vel {not linear.x > 0.0} within 50 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {not safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: some /husky_velocity_controller/cmd_vel {not linear.x > 0.0} within 50 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: some /husky_velocity_controller/cmd_vel {linear.x > 0.0} within 50 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}}: some /husky_velocity_controller/cmd_vel {not linear.x > 0.0} within 50 ms"
+                - "until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: some /husky_velocity_controller/cmd_vel {not linear.x > 0.0} within 50 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: no /husky_velocity_controller/cmd_vel {not linear.x > 0.0} within 50 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: /agrob/agrob_mode forbids /husky_velocity_controller/cmd_vel {not linear.x > 0.0} within 50 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: /agrob/safe_mode forbids /husky_velocity_controller/cmd_vel {not linear.x > 0.0} within 50 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: /agrob/cmd_vel_goto forbids /husky_velocity_controller/cmd_vel {not linear.x > 0.0} within 50 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: /agrob/cmd_vel_joy forbids /husky_velocity_controller/cmd_vel {not linear.x > 0.0} within 50 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: /husky_velocity_controller/cmd_vel {not linear.x > 0.0} requires /agrob/agrob_mode within 50 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: /husky_velocity_controller/cmd_vel {not linear.x > 0.0} requires /agrob/safe_mode within 50 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: /husky_velocity_controller/cmd_vel {not linear.x > 0.0} requires /agrob/cmd_vel_goto within 50 ms"
+                - "after /agrob/safe_mode {safe_modes in {\"003\", \"009\", \"013\", \"019\", \"090\", \"092\", \"093\", \"099\", \"100\", \"102\", \"103\", \"109\", \"110\", \"112\", \"113\", \"119\", \"190\", \"192\", \"193\", \"199\"}} until /agrob/safe_mode {safe_modes in {\"000\", \"002\", \"010\", \"012\"}}: /husky_velocity_controller/cmd_vel {not linear.x > 0.0} requires /agrob/cmd_vel_joy within 50 ms"
+        user_data:
+            haros_plugin_pbt_gen:
+                deadline: 3.0
+                extra_monitors: false
+                max_examples: 200
+                slack: 0.005
+                random_headers: false
+    agrob_system:
+        launch:
+            - hpl_test/launch/agrob_system.launch
+        hints:
+            nodes:
+                /agrob_supervisor_node_1:
+                    publishers:
+                      - topic: /agrob_supervisor_node_1/?
+                        original_name: /agrob_supervisor_node_1/agrobv16/cmd_vel_supervisor
+        hpl:
+            properties:
+                ################################################################
+                # axioms
+                - "globally: no /astar_gps_goal"
+                - "globally: no /agrob/target"
+                - "globally: no /agrob/cmd_auto"
+                - "globally: no /fix"
+                - "globally: no /agrob_map/gps/filtered"
+                - "globally: no /agrob_map/imu/rpy"
+                - "globally: no /velodyne_points"
+                - "globally: no /scan {not range_min = 0.01}"
+                - "globally: no /scan {not range_max = 20.0}"
+                - "globally: no /scan {not scan_time = 0.02}"
+                - "globally: no /scan {not angle_min = -2.35619}"
+                - "globally: no /scan {not angle_max = 2.35619}"
+                - "globally: no /scan {not angle_increment = 0.785398}"
+                - "globally: no /scan {not time_increment = 0.0028571428571429}"
+                - "globally: no /scan {not len(ranges) = 7}"
+                - "globally: no /scan {not len(intensities) = 7}"
+                - "globally: no /scan {not ranges[3] in [0.01 to 20.0]}"
+                - "globally: no /lidar1/scan {not range_min = 0.01}"
+                - "globally: no /lidar1/scan {not range_max = 20.0}"
+                - "globally: no /lidar1/scan {not scan_time = 0.02}"
+                - "globally: no /lidar1/scan {not angle_min = -2.35619}"
+                - "globally: no /lidar1/scan {not angle_max = 2.35619}"
+                - "globally: no /lidar1/scan {not angle_increment = 0.785398}"
+                - "globally: no /lidar1/scan {not time_increment = 0.0028571428571429}"
+                - "globally: no /lidar1/scan {not len(ranges) = 7}"
+                - "globally: no /lidar1/scan {not len(intensities) = 7}"
+                - "globally: no /lidar1/scan {not ranges[3] in [0.01 to 20.0]}"
+                - "globally: no /darknet_ros/bounding_boxes {not len(bounding_boxes) = 2}"
+                - "globally: no /darknet_ros/bounding_boxes {not bounding_boxes[0].Class in {\"person\", \"other\"}}"
+                - "globally: no /darknet_ros/bounding_boxes {not bounding_boxes[1].Class in {\"other\", \"person\"}}"
+                - "globally: no /imu_um7/rpy {not vector.x in {0, 0.2181662, 0.436333}}"
+                - "globally: no /imu_um7/rpy {not vector.y in {0, 0.1309, 0.2618}}"
+                - "globally: no /imu_um7/rpy {not vector.z = 0.0}"
+                - "globally: no /joy_teleop/joy {not buttons[0] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[1] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[2] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[3] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[4] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[5] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[6] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[7] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[8] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[9] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not buttons[10] in {0, 1}}"
+                - "globally: no /joy_teleop/joy {not axes[0] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[1] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[2] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[3] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[4] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[5] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[6] in [-1.0 to 1.0]}"
+                - "globally: no /joy_teleop/joy {not axes[7] in [-1.0 to 1.0]}"
+                ################################################################
+                # properties
+                - "globally: no /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]}"
+                - "globally: /darknet_ros/bounding_boxes {bounding_boxes[0].Class = \"person\"} forbids /husky_velocity_controller/cmd_vel {linear.x > 0.0} within 2000 ms"
+                - "until /joy_teleop/joy: no /husky_velocity_controller/cmd_vel {not linear.x = 0.0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /husky_velocity_controller/cmd_vel {linear.x > 0.25} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                ################################################################
+                # mutants
+                - "globally: no /husky_velocity_controller/cmd_vel"
+                - "globally: no /husky_velocity_controller/cmd_vel {linear.x in [-0.25 to 0.5]}"
+                - "globally: some /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]} within 5000 ms"
+                - "globally: /joy_teleop/joy causes /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]} within 100 ms"
+                - "globally: /scan causes /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]} within 100 ms"
+                - "globally: /lidar1/scan causes /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]} within 100 ms"
+                - "globally: /darknet_ros/bounding_boxes causes /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]} within 100 ms"
+                - "globally: /imu_um7/rpy causes /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]} within 100 ms"
+                - "globally: /agrob/cmd_vel_goto causes /husky_velocity_controller/cmd_vel {not linear.x in [-0.25 to 0.5]} within 100 ms"
+                - "globally: /darknet_ros/bounding_boxes {bounding_boxes[0].Class = \"person\"} forbids /husky_velocity_controller/cmd_vel {linear.x > 0.0} within 5000 ms"
+                - "globally: /darknet_ros/bounding_boxes forbids /husky_velocity_controller/cmd_vel {linear.x > 0.0} within 2000 ms"
+                - "globally: /darknet_ros/bounding_boxes {bounding_boxes[0].Class = \"person\"} forbids /husky_velocity_controller/cmd_vel within 2000 ms"
+                - "globally: /darknet_ros/bounding_boxes {bounding_boxes[0].Class = \"other\"} forbids /husky_velocity_controller/cmd_vel {linear.x > 0.0} within 2000 ms"
+                - "globally: /darknet_ros/bounding_boxes {bounding_boxes[0].Class = \"person\"} forbids /husky_velocity_controller/cmd_vel {linear.x < 0.0} within 2000 ms"
+                - "globally: /darknet_ros/bounding_boxes {bounding_boxes[0].Class = \"person\"} forbids /husky_velocity_controller/cmd_vel {linear.x = 0.0} within 2000 ms"
+                - "globally: /darknet_ros/bounding_boxes {bounding_boxes[0].Class = \"person\"} forbids /husky_velocity_controller/cmd_vel {not linear.x > 0.0} within 2000 ms"
+                - "globally: some /husky_velocity_controller/cmd_vel {linear.x > 0.0} within 2000 ms"
+                - "globally: /darknet_ros/bounding_boxes {bounding_boxes[0].Class = \"person\"} causes /husky_velocity_controller/cmd_vel {linear.x > 0.0} within 2000 ms"
+                - "globally: /husky_velocity_controller/cmd_vel {linear.x > 0.0} requires /darknet_ros/bounding_boxes {bounding_boxes[0].Class = \"person\"} within 2000 ms"
+                - "until /joy_teleop/joy: no /husky_velocity_controller/cmd_vel"
+                - "until /joy_teleop/joy: no /husky_velocity_controller/cmd_vel {not linear.x < 0.0}"
+                - "until /joy_teleop/joy: no /husky_velocity_controller/cmd_vel {not linear.x > 0.0}"
+                - "until /joy_teleop/joy: no /husky_velocity_controller/cmd_vel {linear.x = 0.0}"
+                - "globally: no /husky_velocity_controller/cmd_vel {not linear.x = 0.0}"
+                - "until /joy_teleop/joy: some /husky_velocity_controller/cmd_vel {not linear.x = 0.0} within 5000 ms"
+                - "until /joy_teleop/joy: /scan causes /husky_velocity_controller/cmd_vel {not linear.x = 0.0} within 100 ms"
+                - "until /joy_teleop/joy: /lidar1/scan causes /husky_velocity_controller/cmd_vel {not linear.x = 0.0} within 100 ms"
+                - "until /joy_teleop/joy: /darknet_ros/bounding_boxes causes /husky_velocity_controller/cmd_vel {not linear.x = 0.0} within 100 ms"
+                - "until /joy_teleop/joy: /imu_um7/rpy causes /husky_velocity_controller/cmd_vel {not linear.x = 0.0} within 100 ms"
+                - "until /joy_teleop/joy: /agrob/cmd_vel_goto causes /husky_velocity_controller/cmd_vel {not linear.x = 0.0} within 100 ms"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /husky_velocity_controller/cmd_vel {linear.x > 0.25} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0} within 50 ms"
+                - "after /imu_um7/rpy: /husky_velocity_controller/cmd_vel {linear.x > 0.25} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /husky_velocity_controller/cmd_vel requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /husky_velocity_controller/cmd_vel {linear.x = 0.25} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /husky_velocity_controller/cmd_vel {linear.x < 0.25} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /husky_velocity_controller/cmd_vel {not linear.x > 0.25} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /husky_velocity_controller/cmd_vel {linear.x > 0.25} requires /imu_um7/rpy {vector.x < 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /husky_velocity_controller/cmd_vel {linear.x > 0.25} requires /imu_um7/rpy {vector.x > 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /husky_velocity_controller/cmd_vel {linear.x > 0.25} requires /imu_um7/rpy {vector.x = 0 and vector.y < 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /husky_velocity_controller/cmd_vel {linear.x > 0.25} requires /imu_um7/rpy {vector.x = 0 and vector.y > 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /husky_velocity_controller/cmd_vel {linear.x > 0.25} requires /imu_um7/rpy {not vector.x = 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /husky_velocity_controller/cmd_vel {linear.x > 0.25} requires /imu_um7/rpy {vector.x = 0 and not vector.y = 0}"
+                - "until /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /husky_velocity_controller/cmd_vel {linear.x > 0.25} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                - "globally: /husky_velocity_controller/cmd_vel {linear.x > 0.25} requires /imu_um7/rpy {vector.x = 0 and vector.y = 0}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: no /husky_velocity_controller/cmd_vel {linear.x > 0.25}"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: some /husky_velocity_controller/cmd_vel {linear.x > 0.25} within 1000 ms"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /imu_um7/rpy {vector.x = 0 and vector.y = 0} causes /husky_velocity_controller/cmd_vel {linear.x > 0.25} within 100 ms"
+                - "after /imu_um7/rpy {not vector.x < 0.2181662 and not vector.y < 0.1309}: /imu_um7/rpy {vector.x = 0 and vector.y = 0} forbids /husky_velocity_controller/cmd_vel {linear.x > 0.25} within 1000 ms"
+        user_data:
+            haros_plugin_pbt_gen:
+                deadline: 3.0
+                extra_monitors: false
+                max_examples: 200
+                slack: 0.005
+                random_headers: false

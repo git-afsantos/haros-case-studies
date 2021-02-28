@@ -1,0 +1,22 @@
+[
+  {
+    "packages":[
+      "Agrob_path",
+      "agrob_path_planning_stack",
+      "agrob_red_map",
+      "agrob_supervisor",
+      "agrobv16_bringup",
+      "agrobv16_map_server",
+      "agrobv16_supervisor",
+      "agrob_joy",
+      "agrob_safety",
+      "twist_mux",
+      "husky_base",
+      "husky_control",
+      "husky_description",
+      "xacro"
+    ],
+    "repositories":[],
+    "id":"AgRob V16 Extraction Performance"
+  }
+]

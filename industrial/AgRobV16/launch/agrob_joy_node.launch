@@ -1,0 +1,11 @@
+<launch>
+  <arg name="joy_dev" default="/dev/input/js0" />
+  <arg name="joystick" default="true" />
+
+  <group ns="joy_teleop">
+    <rosparam command="load" file="$(find agrob_joy)/config/agrobv16_teleop.yaml" />
+    <param name="joy_node/dev" value="$(arg joy_dev)" />
+
+    <node pkg="agrob_joy" type="teleop_joy" name="agrob_joy" output="screen"/>
+  </group>
+</launch>

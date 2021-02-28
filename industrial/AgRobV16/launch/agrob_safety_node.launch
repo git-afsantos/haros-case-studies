@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Safety Sets Node -->
+  <node pkg="agrob_safety" type="agrob_safety_node" name="agrob_safety_1" >
+    <param name="robot_model" value= "agrobv16"/>
+    <param name="max_pitch" value= "25"/>
+    <param name="max_roll" value= "15"/>
+    <remap from="lidar1/hkscan" to="scan" />
+  </node>
+
+</launch>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Mission Supervisor Node (Node Red) -->
+  <node pkg="agrob_supervisor" type="agrob_supervisor_node_afs" name="agrob_supervisor_node_1" output="screen" >
+    <remap from="/husky/cmd_vel_supervisor" to="husky_velocity_controller/cmd_vel" />
+    <param name="robot_model" value= "agrobv16"/>
+    <param name="message_robot_model" value= "Agrobv16"/>
+    <param name="layer_robot_model" value= "AGROBv16"/>
+    <param name="max_vel" type="double" value= "0.5"/>
+  </node>
+
+</launch>

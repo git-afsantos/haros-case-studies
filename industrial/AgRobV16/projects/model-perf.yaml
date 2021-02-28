@@ -1,0 +1,2928 @@
+%YAML 1.1
+---
+project: AgRob V16 Extraction Performance
+packages:
+    - agrobv16_bringup
+    - agrobv16_supervisor
+    - agrob_joy
+    - agrob_supervisor
+    - agrob_safety
+    - agrobv16_map_server
+    - agrob_red_map
+    - agrob_path_planning_stack
+    - Agrob_path
+configurations:
+    basic_hints:
+        launch:
+            - agrobv16_bringup/launch/start_basic.launch
+        hints:
+            nodes:
+                /agrob_supervisor_node_1:
+                    publishers:
+                      - topic: /agrob_supervisor_node_1/parameter_descriptions
+                        create: true
+                        msg_type: dynamic_reconfigure/ConfigDescription
+                        queue_size: 1
+                        latched: true
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - topic: /agrob_supervisor_node_1/parameter_updates
+                        create: true
+                        msg_type: dynamic_reconfigure/Config
+                        queue_size: 1
+                        latched: true
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - topic: /agrob_supervisor_node_1/?
+                        original_name: /agrob_supervisor_node_1/agrobv16/cmd_vel_supervisor
+                    servers:
+                      - service: /agrob_supervisor_node_1/set_parameters
+                        create: true
+                        srv_type: dynamic_reconfigure/Reconfigure
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                    setters:
+                      - parameter: /agrob_supervisor_node_1/Update_map
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/yaw
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/roll
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/pitch
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Latitude_i
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Longitude_i
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Latitude_f
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Longitude_f
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/GO_x
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/GO_y
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/w_gain
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                    getters:
+                      - parameter: /agrob_supervisor_node_1/Update_map
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/yaw
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/roll
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/pitch
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Latitude_i
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Longitude_i
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Latitude_f
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Longitude_f
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/GO_x
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/GO_y
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/w_gain
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+            parameters:
+                /robot_description:
+                    param_type: str
+                    default_value: "<xml></xml>"
+        user_data:
+            haros_plugin_model_ged:
+                import:
+                    - basic
+                truth: {}
+    path_planning_hints:
+        launch:
+            - agrobv16_bringup/launch/start_hw.launch
+            - agrobv16_bringup/launch/start_basic_path_planning.launch
+        hints:
+            nodes:
+                /agrob_supervisor_node_1:
+                    publishers:
+                      - topic: /agrob_supervisor_node_1/parameter_descriptions
+                        create: true
+                        msg_type: dynamic_reconfigure/ConfigDescription
+                        queue_size: 1
+                        latched: true
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - topic: /agrob_supervisor_node_1/parameter_updates
+                        create: true
+                        msg_type: dynamic_reconfigure/Config
+                        queue_size: 1
+                        latched: true
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - topic: /agrob_supervisor_node_1/?
+                        original_name: /agrob_supervisor_node_1/agrobv16/cmd_vel_supervisor
+                    servers:
+                      - service: /agrob_supervisor_node_1/set_parameters
+                        create: true
+                        srv_type: dynamic_reconfigure/Reconfigure
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                    setters:
+                      - parameter: /agrob_supervisor_node_1/Update_map
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/yaw
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/roll
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/pitch
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Latitude_i
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Longitude_i
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Latitude_f
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Longitude_f
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/GO_x
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/GO_y
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/w_gain
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                    getters:
+                      - parameter: /agrob_supervisor_node_1/Update_map
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/yaw
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/roll
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/pitch
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Latitude_i
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Longitude_i
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Latitude_f
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/Delta_Longitude_f
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/GO_x
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/GO_y
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                      - parameter: /agrob_supervisor_node_1/w_gain
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_supervisor
+                            file: src/mission_supervisor.cpp
+                            line: 732
+                            column: 3
+                /map_red_node:
+                    publishers:
+                      - topic: /map_red_node/parameter_descriptions
+                        create: true
+                        msg_type: dynamic_reconfigure/ConfigDescription
+                        queue_size: 1
+                        latched: true
+                        traceability:
+                            package: agrob_red_map
+                            file: src/agrob_red_map_node.cpp
+                            line: 1015
+                            column: 3
+                      - topic: /map_red_node/parameter_updates
+                        create: true
+                        msg_type: dynamic_reconfigure/Config
+                        queue_size: 1
+                        latched: true
+                        traceability:
+                            package: agrob_red_map
+                            file: src/agrob_red_map_node.cpp
+                            line: 1015
+                            column: 3
+                    clients:
+                       - service: /?/pose_to_polar
+                         original_name: /map_red_node/pose_to_polar
+                       - service: /?/polar_to_pose
+                         original_name: /map_red_node/polar_to_pose
+                       - service: /?/datum
+                         original_name: /map_red_node/datum
+                    servers:
+                      - service: /map_red_node/set_parameters
+                        create: true
+                        srv_type: dynamic_reconfigure/Reconfigure
+                        traceability:
+                            package: agrob_red_map
+                            file: src/agrob_red_map_node.cpp
+                            line: 1015
+                            column: 3
+                    setters:
+                      - parameter: /map_red_node/Update_map
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: agrob_red_map
+                            file: src/agrob_red_map_node.cpp
+                            line: 1015
+                            column: 3
+                      - parameter: /map_red_node/yaw_offset
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_red_map
+                            file: src/agrob_red_map_node.cpp
+                            line: 1015
+                            column: 3
+                      - parameter: /map_red_node/Delta_Latitude
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_red_map
+                            file: src/agrob_red_map_node.cpp
+                            line: 1015
+                            column: 3
+                      - parameter: /map_red_node/Delta_Longitude
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_red_map
+                            file: src/agrob_red_map_node.cpp
+                            line: 1015
+                            column: 3
+                    getters:
+                      - parameter: /map_red_node/Update_map
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: agrob_red_map
+                            file: src/agrob_red_map_node.cpp
+                            line: 1015
+                            column: 3
+                      - parameter: /map_red_node/yaw_offset
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: agrob_red_map
+                            file: src/agrob_red_map_node.cpp
+                            line: 1015
+                            column: 3
+                      - parameter: /map_red_node/Delta_Latitude
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_red_map
+                            file: src/agrob_red_map_node.cpp
+                            line: 1015
+                            column: 3
+                      - parameter: /map_red_node/Delta_Longitude
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: agrob_red_map
+                            file: src/agrob_red_map_node.cpp
+                            line: 1015
+                            column: 3
+                /Agrob_path:
+                    publishers:
+                      - topic: /Agrob_path/parameter_descriptions
+                        create: true
+                        msg_type: dynamic_reconfigure/ConfigDescription
+                        queue_size: 1
+                        latched: true
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - topic: /Agrob_path/parameter_updates
+                        create: true
+                        msg_type: dynamic_reconfigure/Config
+                        queue_size: 1
+                        latched: true
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                    servers:
+                      - service: /Agrob_path/set_parameters
+                        create: true
+                        srv_type: dynamic_reconfigure/Reconfigure
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                    setters:
+                      - parameter: /Agrob_path/use_back_laser
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/penalize_heading_change
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/vegetation_wall
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/follow_vegetation_wall
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/configuration
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/cubic_scale
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/laser_range
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/rob_vel
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/compaction_cost_scale
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/compaction_cost
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/trees_dist
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                    getters:
+                      - parameter: /Agrob_path/use_back_laser
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/penalize_heading_change
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/vegetation_wall
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/follow_vegetation_wall
+                        create: true
+                        param_type: bool
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/configuration
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/cubic_scale
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/laser_range
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/rob_vel
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/compaction_cost_scale
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/compaction_cost
+                        create: true
+                        param_type: int
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/trees_dist
+                        create: true
+                        param_type: double
+                        traceability:
+                            package: Agrob_path
+                            file: src/Agrob_path.cpp
+                            line: 1303
+                            column: 3
+                      - parameter: /Agrob_path/altitude_map
+                        default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/smooth_altitude_map_seixo_cut.png
+                      - parameter: /Agrob_path/gtiff_file
+                        default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/Map_PC2GD/DEM_seixo.gtiff
+                      - parameter: /Agrob_path/compatcion_map
+                        default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/Compaction/compactionSoil.png
+                      - parameter: /Agrob_path/compatcion_mapViz
+                        default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/Compaction/compactionMAP.png
+                      - parameter: /Agrob_path/inclMaps
+                        default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/mapasIncl/
+                      - parameter: /Agrob_path/vinhaOFF_maps
+                        default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/DockingMaps/vinha_
+                      - parameter: /Agrob_path/vineMaps
+                        default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/vineMaps/
+                      - parameter: /Agrob_path/distFile
+                        default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/distFile
+                      - parameter: /Agrob_path/localMaps
+                        default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/localsMaps/
+            parameters:
+                /robot_description:
+                    param_type: str
+                    default_value: "<xml></xml>"
+        user_data:
+            haros_plugin_model_ged:
+                import:
+                    - path_planning
+                truth: {}
+    common:
+        launch:
+            - agrobv16_bringup/launch/afs_agrobv16_common.launch
+        user_data:
+            haros_plugin_model_ged:
+                truth:
+                    nodes:
+                        /laser_base_link:
+                            node_type: tf/static_transform_publisher
+                            args: "0.39 0 0.36 0 0 0  /base_link /laser 10"
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_static_tf.launch
+                                line: 4
+                                column: 3
+                            # ignore ROS API
+                        /laser:
+                            node_type: tf/static_transform_publisher
+                            args: "-0.07 0.07 0.58 0 1.33 0.05  /laser /laser_vertical  100"
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_static_tf.launch
+                                line: 5
+                                column: 3
+                            # ignore ROS API
+                        /robot_state_publisher_husky:
+                            node_type: robot_state_publisher/robot_state_publisher
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_static_tf.launch
+                                line: 8
+                                column: 3
+                            # ignore ROS API
+                        /lms1xx:
+                            node_type: lms1xx/LMS1xx_node
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_sensors.launch
+                                line: 5
+                                column: 3
+                            # ignore ROS API
+                        /lidar1/lidar1:
+                            node_type: urg_node/urg_node
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_sensors.launch
+                                line: 10
+                                column: 3
+                            # ignore ROS API
+                        /ProsilicaCamera:
+                            node_type: prosilica_camera/prosilica_node
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_sensors.launch
+                                line: 16
+                                column: 3
+                            # ignore ROS API
+                        /imu7link:
+                            node_type: tf/static_transform_publisher
+                            args: "-0.05 0.07 0.58 0.0 1.33 0.0  /base_link /imu_link_um7  100"
+                            traceability:
+                                package: agrobv16_supervisor
+                                file: launch/um7.launch
+                                line: 4
+                                column: 3
+                            # ignore ROS API
+                        /um7_driver:
+                            node_type: um7/um7_driver
+                            remaps:
+                                /imu: /imu_um7
+                            traceability:
+                                package: agrobv16_supervisor
+                                file: launch/um7.launch
+                                line: 7
+                                column: 3
+                            # ignore ROS API
+                        /nmea_serial_driver:
+                            node_type: nmea_navsat_driver/nmea_serial_driver
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_sensors.launch
+                                line: 31
+                                column: 3
+                            # ignore ROS API
+                        /husky_node:
+                            node_type: husky_base/husky_node
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_controllers.launch
+                                line: 19
+                                column: 3
+                            # ignore ROS API
+                        /base_controller_spawner:
+                            node_type: controller_manager/spawner
+                            args: "husky_joint_publisher husky_velocity_controller --shutdown-timeout 3"
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_controllers.launch
+                                line: 33
+                                column: 3
+                            # ignore ROS API
+                        /diagnostic_aggregator:
+                            node_type: diagnostic_aggregator/aggregator_node
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_controllers.launch
+                                line: 37
+                                column: 3
+                            # ignore ROS API
+                        /joy_teleop/teleop_joy:
+                            node_type: joy/joy_node
+                            traceability:
+                                package: agrob_joy
+                                file: launch/agrobv16_joy.launch
+                                line: 10
+                                column: 5
+                            # ignore ROS API
+                        /joy_teleop/teleop_twist_joy:
+                            node_type: teleop_twist_joy/teleop_node
+                            traceability:
+                                package: agrob_joy
+                                file: launch/agrobv16_joy.launch
+                                line: 13
+                                column: 5
+                            # ignore ROS API
+                        /joy_teleop/agrob_joy:
+                            node_type: agrob_joy/teleop_joy
+                            traceability:
+                                package: agrob_joy
+                                file: launch/agrobv16_joy.launch
+                                line: 16
+                                column: 5
+                            publishers:
+                              - topic: /agrob/cmd_vel_joy
+                                msg_type: geometry_msgs/TwistStamped
+                                queue_size: 1
+                                traceability:
+                                    package: agrob_joy
+                                    file: src/teleop_joy.cpp
+                                    line: 62
+                                    column: 14
+                              - topic: /agrob/agrob_mode
+                                msg_type: agrob_supervisor/agrob_mode
+                                queue_size: 1
+                                traceability:
+                                    package: agrob_joy
+                                    file: src/teleop_joy.cpp
+                                    line: 63
+                                    column: 15
+                            subscribers:
+                              - topic: /joy_teleop/joy
+                                msg_type: sensor_msgs/Joy
+                                queue_size: 10
+                                traceability:
+                                    package: agrob_joy
+                                    file: src/teleop_joy.cpp
+                                    line: 64
+                                    column: 14
+                              - topic: /joy_teleop/cmd_vel
+                                msg_type: geometry_msgs/Twist
+                                queue_size: 10
+                                traceability:
+                                    package: agrob_joy
+                                    file: src/teleop_joy.cpp
+                                    line: 65
+                                    column: 18
+                            getters:
+                              - parameter: /joy_teleop/agrob_joy/axis_linear
+                                param_type: int
+                                default_value: 1
+                                traceability:
+                                    package: agrob_joy
+                                    file: src/teleop_joy.cpp
+                                    line: 49
+                                    column: 3
+                              - parameter: /joy_teleop/agrob_joy/axis_angular
+                                param_type: int
+                                default_value: 3
+                                traceability:
+                                    package: agrob_joy
+                                    file: src/teleop_joy.cpp
+                                    line: 50
+                                    column: 3
+                              - parameter: /joy_teleop/agrob_joy/axis_deadman
+                                param_type: int
+                                default_value: 7
+                                traceability:
+                                    package: agrob_joy
+                                    file: src/teleop_joy.cpp
+                                    line: 51
+                                    column: 3
+                              - parameter: /joy_teleop/agrob_joy/autonomous
+                                param_type: int
+                                default_value: 6
+                                traceability:
+                                    package: agrob_joy
+                                    file: src/teleop_joy.cpp
+                                    line: 52
+                                    column: 3
+                              - parameter: /joy_teleop/agrob_joy/scale_angular
+                                param_type: double
+                                default_value: 40.0
+                                traceability:
+                                    package: agrob_joy
+                                    file: src/teleop_joy.cpp
+                                    line: 53
+                                    column: 3
+                              - parameter: /joy_teleop/agrob_joy/scale_linear
+                                param_type: double
+                                default_value: 40.0
+                                traceability:
+                                    package: agrob_joy
+                                    file: src/teleop_joy.cpp
+                                    line: 54
+                                    column: 3
+                              - parameter: /joy_teleop/agrob_joy/robot_model
+                                param_type: str
+                                default_value: "agrobv18"
+                                traceability:
+                                    package: agrob_joy
+                                    file: src/teleop_joy.cpp
+                                    line: 55
+                                    column: 3
+                        /ekf_localization:
+                            node_type: robot_localization/ekf_localization_node
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_controllers.launch
+                                line: 46
+                                column: 3
+                            # ignore ROS API
+                        /agrob_supervisor_node_1:
+                            node_type: agrob_supervisor/agrob_supervisor_node
+                            remaps:
+                                /husky/cmd_vel_supervisor: /husky_velocity_controller/cmd_vel
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_supervisor.launch
+                                line: 5
+                                column: 3
+                            publishers:
+                              - topic: /agrob_supervisor_node_1/parameter_descriptions
+                                msg_type: dynamic_reconfigure/ConfigDescription
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - topic: /agrob_supervisor_node_1/parameter_updates
+                                msg_type: dynamic_reconfigure/Config
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - topic: /agrob_supervisor_node_1/mission_goto
+                                msg_type: geometry_msgs/PoseArray
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 767
+                                    column: 32
+                              - topic: /husky_velocity_controller/cmd_vel
+                                original_name: /husky/cmd_vel_supervisor
+                                msg_type: geometry_msgs/Twist
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 768
+                                    column: 36
+                              - topic: /agrob_supervisor_node_1/agrobv16/cmd_vel_supervisor
+                                msg_type: geometry_msgs/TwistStamped
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 769
+                                    column: 28
+                              - topic: /agrob/max_velocity
+                                msg_type: std_msgs/Float32MultiArray
+                                queue_size: 2
+                                latched: true
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 770
+                                    column: 29
+                              - topic: /move_base_simple/goal
+                                msg_type: geometry_msgs/PoseStamped
+                                queue_size: 1
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 772
+                                    column: 33
+                            subscribers:
+                              - topic: /agrob_map/gps/filtered
+                                msg_type: sensor_msgs/NavSatFix
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 742
+                                    column: 25
+                              - topic: /fix
+                                msg_type: sensor_msgs/NavSatFix
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 743
+                                    column: 29
+                              - topic: /agrob_map/imu/rpy
+                                msg_type: geometry_msgs/Vector3Stamped
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 744
+                                    column: 26
+                              - topic: /agrob/cmd_vel_goto
+                                msg_type: geometry_msgs/TwistStamped
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 745
+                                    column: 26
+                              - topic: /agrob/cmd_vel_joy
+                                msg_type: geometry_msgs/TwistStamped
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 746
+                                    column: 26
+                              - topic: /agrob/cmd_auto
+                                msg_type: geometry_msgs/Twist
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 747
+                                    column: 26
+                              - topic: /agrob/safe_mode
+                                msg_type: agrob_supervisor/agrob_safe_mode
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 759
+                                    column: 26
+                              - topic: /agrob/agrob_mode
+                                msg_type: agrob_supervisor/agrob_mode
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 760
+                                    column: 26
+                              - topic: /agrob/target
+                                msg_type: geometry_msgs/Pose
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 761
+                                    column: 26
+                              - topic: /astar_gps_goal
+                                msg_type: geographic_msgs/GeoPoint
+                                queue_size: 1
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 763
+                                    column: 34
+                            servers:
+                              - service: /agrob_supervisor_node_1/set_parameters
+                                srv_type: dynamic_reconfigure/Reconfigure
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                            clients:
+                              - service: /polar_to_pose
+                                srv_type: agrob_map_transform/GetPose
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 752
+                                    column: 35
+                            setters:
+                              - parameter: /agrob_supervisor_node_1/Update_map
+                                param_type: bool
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/yaw
+                                param_type: double
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/roll
+                                param_type: double
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/pitch
+                                param_type: double
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/Delta_Latitude_i
+                                param_type: int
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/Delta_Longitude_i
+                                param_type: int
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/Delta_Latitude_f
+                                param_type: int
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/Delta_Longitude_f
+                                param_type: int
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/GO_x
+                                param_type: double
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/GO_y
+                                param_type: double
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/w_gain
+                                param_type: double
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                            getters:
+                              - parameter: /agrob_supervisor_node_1/Update_map
+                                param_type: bool
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/yaw
+                                param_type: double
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/roll
+                                param_type: double
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/pitch
+                                param_type: double
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/Delta_Latitude_i
+                                param_type: int
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/Delta_Longitude_i
+                                param_type: int
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/Delta_Latitude_f
+                                param_type: int
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/Delta_Longitude_f
+                                param_type: int
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/GO_x
+                                param_type: double
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/GO_y
+                                param_type: double
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/w_gain
+                                param_type: double
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 732
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/robot_model
+                                param_type: str
+                                default_value: agrobv18
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 734
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/message_robot_model
+                                param_type: str
+                                default_value: Agrobv18
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 735
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/layer_robot_model
+                                param_type: str
+                                default_value: AGROBv18
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 736
+                                    column: 3
+                              - parameter: /agrob_supervisor_node_1/max_vel
+                                param_type: double
+                                default_value: 0.6
+                                traceability:
+                                    package: agrob_supervisor
+                                    file: src/mission_supervisor.cpp
+                                    line: 737
+                                    column: 3
+                        /agrob_safety_1:
+                            node_type: agrob_safety/agrob_safety_node
+                            remaps:
+                                /lidar1/hkscan: /scan
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_supervisor.launch
+                                line: 15
+                                column: 3
+                            publishers:
+                              - topic: /agrob/safe_mode
+                                msg_type: agrob_supervisor/agrob_safe_mode
+                                queue_size: 1
+                                traceability:
+                                    package: agrob_safety
+                                    file: src/agrob_safety.cpp
+                                    line: 335
+                                    column: 24
+                            subscribers:
+                              - topic: /velodyne_points
+                                msg_type: sensor_msgs/PointCloud2
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_safety
+                                    file: src/agrob_safety.cpp
+                                    line: 327
+                                    column: 25
+                              - topic: /scan
+                                original_name: /lidar1/hkscan
+                                msg_type: sensor_msgs/LaserScan
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_safety
+                                    file: src/agrob_safety.cpp
+                                    line: 328
+                                    column: 26
+                              - topic: /lidar1/scan
+                                msg_type: sensor_msgs/LaserScan
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_safety
+                                    file: src/agrob_safety.cpp
+                                    line: 329
+                                    column: 40
+                              - topic: /darknet_ros/bounding_boxes
+                                msg_type: darknet_ros_msgs/BoundingBoxes
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_safety
+                                    file: src/agrob_safety.cpp
+                                    line: 332
+                                    column: 32
+                              - topic: /imu_um7/rpy
+                                msg_type: geometry_msgs/Vector3Stamped
+                                queue_size: 2
+                                traceability:
+                                    package: agrob_safety
+                                    file: src/agrob_safety.cpp
+                                    line: 333
+                                    column: 30
+                            getters:
+                              - parameter: /robot_model
+                                param_type: str
+                                default_value: agrobv17
+                                traceability:
+                                    package: agrob_safety
+                                    file: src/agrob_safety.cpp
+                                    line: 337
+                                    column: 3
+                              - parameter: /max_pitch
+                                param_type: int
+                                default_value: 25
+                                traceability:
+                                    package: agrob_safety
+                                    file: src/agrob_safety.cpp
+                                    line: 338
+                                    column: 3
+                              - parameter: /max_roll
+                                param_type: int
+                                default_value: 15
+                                traceability:
+                                    package: agrob_safety
+                                    file: src/agrob_safety.cpp
+                                    line: 339
+                                    column: 3
+                        /gps_init_to_baselink:
+                            node_type: tf/static_transform_publisher
+                            args: "0 0 0 0 0 0 /base_link /gps  10"
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/navsat_transform_agrobv16.launch
+                                line: 4
+                                column: 3
+                            # ignore ROS API
+                        /agrob_gnss_transform_node:
+                            node_type: agrob_map_transform/agrob_gnss_transform_node
+                            remaps:
+                                /imu/data: /Dummy/IMU
+                                /odometry/filtered: /integrated_to_init
+                                /gps/fix: /fix
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/navsat_transform_agrobv16.launch
+                                line: 7
+                                column: 3
+                            # ignore ROS API FIXME
+                    parameters:
+                        /lms1xx/host:
+                            default_value: "192.168.0.5"
+                            param_type: str
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_sensors.launch
+                                line: 6
+                                column: 5
+                        /lidar1/lidar1/ip_address:
+                            default_value: "192.168.0.15"
+                            param_type: str
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_sensors.launch
+                                line: 11
+                                column: 5
+                        /lidar1/lidar1/frame_id:
+                            default_value: laser_vertical
+                            param_type: str
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_sensors.launch
+                                line: 12
+                                column: 5
+                        /ProsilicaCamera/ip_address:
+                            default_value: "192.168.0.50"
+                            param_type: str
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_sensors.launch
+                                line: 17
+                                column: 5
+                        /ProsilicaCamera/guid:
+                            default_value: 6005284
+                            param_type: int
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_sensors.launch
+                                line: 18
+                                column: 5
+                        /um7_driver/port:
+                            default_value: /dev/IMU
+                            param_type: str
+                            traceability:
+                                package: agrobv16_supervisor
+                                file: launch/um7.launch
+                                line: 9
+                                column: 5
+                        /um7_driver/mag_updates:
+                            default_value: false
+                            param_type: bool
+                            traceability:
+                                package: agrobv16_supervisor
+                                file: launch/um7.launch
+                                line: 10
+                                column: 5
+                        /um7_driver/frame_id:
+                            default_value: imu_link_um7
+                            param_type: str
+                            traceability:
+                                package: agrobv16_supervisor
+                                file: launch/um7.launch
+                                line: 11
+                                column: 5
+                        /um7_driver/tf_ned_to_enu:
+                            default_value: false
+                            param_type: bool
+                            traceability:
+                                package: agrobv16_supervisor
+                                file: launch/um7.launch
+                                line: 12
+                                column: 5
+                        /nmea_serial_driver/port:
+                            default_value: /dev/GPS2
+                            param_type: str
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_sensors.launch
+                                line: 32
+                                column: 5
+                        /robot_description:
+                            default_value: "<xml></xml>" # not really, it is a *lot* of XML
+                            param_type: str
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_controllers.launch
+                                line: 10
+                                column: 3
+                        /husky_node:
+                            default_value:
+                                # port: $(optenv HUSKY_PORT /dev/HUSKY)
+                                port: /dev/HUSKY
+                                control_frequency: 10.0
+                                diagnostic_frequency: 1.0
+                                max_acceleration: 0.04
+                                max_speed: 0.7
+                                wheel_diameter: 0.3555
+                                polling_timeout: 10.0
+                            param_type: yaml
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_controllers.launch
+                                line: 20
+                                column: 5
+                        /husky_joint_publisher:
+                            default_value:
+                                type: "joint_state_controller/JointStateController"
+                                publish_rate: 50
+                            param_type: yaml
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_controllers.launch
+                                line: 32
+                                column: 3
+                        /husky_velocity_controller:
+                            default_value:
+                                type: "diff_drive_controller/DiffDriveController"
+                                left_wheel: ['front_left_wheel', 'rear_left_wheel']
+                                right_wheel: ['front_right_wheel', 'rear_right_wheel']
+                                publish_rate: 50
+                                pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+                                twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+                                cmd_vel_timeout: 0.25
+                                velocity_rolling_window_size: 2
+                                base_frame_id: base_link
+                                enable_odom_tf: false
+                                estimate_velocity_from_position: false
+                                wheel_separation_multiplier: 1.875
+                                wheel_radius_multiplier: 1.0
+                                linear:
+                                    x:
+                                        has_velocity_limits: true
+                                        max_velocity: 1.0
+                                        has_acceleration_limits: true
+                                        max_acceleration: 3.0
+                                angular:
+                                    z:
+                                        has_velocity_limits: true
+                                        max_velocity: 2.0
+                                        has_acceleration_limits: true
+                                        max_acceleration: 6.0
+                            param_type: yaml
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_controllers.launch
+                                line: 32
+                                column: 3
+                        /diagnostic_aggregator:
+                            default_value:
+                                analyzers:
+                                    husky:
+                                        type: diagnostic_aggregator/GenericAnalyzer
+                                        path: Husky A200
+                                        find_and_remove_prefix: 'husky_base: '
+                                        expected: ['husky_base: power_status','husky_base: system_status','husky_base: safety_status','husky_base: software_status']
+                                        timeout: 5.0
+                            param_type: yaml
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_controllers.launch
+                                line: 38
+                                column: 5
+                        /joy_teleop:
+                            default_value:
+                                teleop_twist_joy:
+                                    axis_linear: 1
+                                    scale_linear: 0.4
+                                    scale_linear_turbo: 1.0
+                                    axis_angular: 0
+                                    scale_angular: 0.6
+                                    scale_angular_turbo: 1.2
+                                    enable_button: 0
+                                    enable_turbo_button: 2
+                                joy_node:
+                                    deadzone: 0.1
+                                    autorepeat_rate: 20
+                                agrob_joy:
+                                    axis_deadman: 5
+                                    autonomous: 2
+                                    robot_model: "agrobv16"
+                            param_type: yaml
+                            traceability:
+                                package: agrob_joy
+                                file: launch/agrobv16_joy.launch
+                                line: 7
+                                column: 5
+                        /joy_teleop/joy_node/dev:
+                            default_value: /dev/input/js0
+                            param_type: str
+                            traceability:
+                                package: agrob_joy
+                                file: launch/agrobv16_joy.launch
+                                line: 8
+                                column: 5
+                        /ekf_localization:
+                            default_value:
+                                odom_frame: odom
+                                base_link_frame: base_link
+                                world_frame: odom
+                                two_d_mode: true
+                                frequency: 50
+                                odom0: husky_velocity_controller/odom
+                                odom0_config: [false, false, false,
+                                               false, false, false,
+                                               true, true, true,
+                                               false, false, true,
+                                               false, false, false]
+                                odom0_differential: false
+                                odom0_queue_size: 10
+                                imu0: imu/data
+                                imu0_config: [false, false, false,
+                                              true, true, true,
+                                              false, false, false,
+                                              true, true, true,
+                                              false, false, false]
+                                imu0_differential: true
+                                imu0_queue_size: 10
+                                imu0_remove_gravitational_acceleration: true
+                            param_type: yaml
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_controllers.launch
+                                line: 47
+                                column: 5
+                        /agrob_supervisor_node_1/robot_model:
+                            default_value: agrobv16
+                            param_type: str
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_supervisor.launch
+                                line: 8
+                                column: 5
+                        /agrob_supervisor_node_1/message_robot_model:
+                            default_value: Agrobv16
+                            param_type: str
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_supervisor.launch
+                                line: 9
+                                column: 5
+                        /agrob_supervisor_node_1/layer_robot_model:
+                            default_value: AGROBv16
+                            param_type: str
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_supervisor.launch
+                                line: 10
+                                column: 5
+                        /agrob_supervisor_node_1/max_vel:
+                            default_value: 0.5
+                            param_type: double
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_supervisor.launch
+                                line: 11
+                                column: 5
+                        /agrob_safety_1/robot_model:
+                            default_value: agrobv16
+                            param_type: str
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_supervisor.launch
+                                line: 16
+                                column: 5
+                        /agrob_safety_1/max_pitch:
+                            default_value: 25
+                            param_type: int
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_supervisor.launch
+                                line: 17
+                                column: 5
+                        /agrob_safety_1/max_roll:
+                            default_value: 15
+                            param_type: int
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/agrobv16_supervisor.launch
+                                line: 18
+                                column: 5
+                        /agrob_gnss_transform_node:
+                            default_value:
+                                frequency: 30
+                                delay: 3.0
+                                magnetic_declination_radians: 0
+                                yaw_offset: 0
+                                zero_altitude: true
+                                broadcast_utm_transform: true
+                                broadcast_utm_transform_as_parent_frame: false
+                                publish_filtered_gps: true
+                                use_odometry_yaw: true
+                                wait_for_datum: true
+                                datum: [41.166752, -7.554963, 1.1512532925]
+                                robot_model: "agrobv18"
+                                world_frame_id_: "map"
+                                utm_zone_: "29"
+                                PF_for_datum_orientation_estimation: false
+                            param_type: yaml
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/navsat_transform_agrobv16.launch
+                                line: 10
+                                column: 5
+    basic:
+        launch:
+            - agrobv16_bringup/launch/start_basic.launch
+        user_data:
+            haros_plugin_model_ged:
+                import:
+                    - common
+                truth:
+                    nodes:
+                        /hector_mapping:
+                            node_type: hector_mapping/hector_mapping
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/hector_map.launch
+                                line: 4
+                                column: 3
+                            # ignore ROS API
+                        /zed_link:
+                            node_type: tf/static_transform_publisher
+                            args: "0.15 0.0 1.06 0.0 0.0 0.0 /base_link /zed_tracked_frame 5"
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/hector_map.launch
+                                line: 12
+                                column: 3
+                            # ignore ROS API
+                    parameters:
+                        /hector_mapping/base_frame:
+                            default_value: base_link
+                            param_type: str
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/hector_map.launch
+                                line: 5
+                                column: 5
+                        /hector_mapping/pub_map_odom_transform:
+                            default_value: true
+                            param_type: bool
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/hector_map.launch
+                                line: 6
+                                column: 5
+                        /hector_mapping/map_frame:
+                            default_value: map
+                            param_type: str
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/hector_map.launch
+                                line: 7
+                                column: 5
+                        /hector_mapping/map_size:
+                            default_value: 4500
+                            param_type: int
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/hector_map.launch
+                                line: 8
+                                column: 5
+                        /hector_mapping/map_resolution:
+                            default_value: 0.03
+                            param_type: double
+                            traceability:
+                                package: agrobv16_bringup
+                                file: launch/hector_map.launch
+                                line: 9
+                                column: 5
+    path_planning:
+        launch:
+            - agrobv16_bringup/launch/start_hw.launch
+            - agrobv16_bringup/launch/start_basic_path_planning.launch
+        user_data:
+            haros_plugin_model_ged:
+                import:
+                    - common
+                truth:
+                    nodes:
+                        /map_server:
+                            node_type: map_server/map_server
+                            # args: "$(find agrobv16_map_server)/config/sogrape_5000.yaml"
+                            args: "/home/andre/ros/ws/src/agrob/agrobv16_map_server/config/sogrape_5000.yaml"
+                            traceability:
+                                package: agrobv16_map_server
+                                file: launch/run_map_server_sogrape.launch
+                                line: 6
+                                column: 3
+                            # ignore ROS API
+                        /map_red_node:
+                            node_type: agrob_red_map/agrob_red_map_node
+                            traceability:
+                                package: agrob_red_map
+                                file: launch/agrob_red_map.launch
+                                line: 4
+                                column: 3
+                            publishers:
+                              - topic: /rectangle_map
+                                msg_type: geometry_msgs/PoseArray
+                                queue_size: 1
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 126
+                                    column: 26
+                              - topic: /astar_gps_goal
+                                msg_type: geographic_msgs/GeoPoint
+                                queue_size: 1
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 128
+                                    column: 16
+                              - topic: /obstacle_map
+                                msg_type: geometry_msgs/PointStamped
+                                queue_size: 1
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 130
+                                    column: 20
+                              - topic: /map_red_node/parameter_descriptions
+                                msg_type: dynamic_reconfigure/ConfigDescription
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1015
+                                    column: 3
+                              - topic: /map_red_node/parameter_updates
+                                msg_type: dynamic_reconfigure/Config
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1015
+                                    column: 3
+                            subscribers:
+                              - topic: /map
+                                msg_type: nav_msgs/OccupancyGrid
+                                queue_size: 100
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 122
+                                    column: 15
+                              - topic: /plan_pub
+                                msg_type: nav_msgs/Path
+                                queue_size: 1
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 124
+                                    column: 18
+                            clients:
+                              - service: /map_red_node/pose_to_polar
+                                srv_type: agrob_map_transform/GetPolars
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 112
+                                    column: 33
+                              - service: /map_red_node/polar_to_pose
+                                srv_type: agrob_map_transform/GetPose
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 114
+                                    column: 33
+                              - service: /map_red_node/datum
+                                srv_type: agrob_map_transform/SetDatum
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 116
+                                    column: 31
+                            servers:
+                              - service: /map_red_node/set_parameters
+                                srv_type: dynamic_reconfigure/Reconfigure
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1015
+                                    column: 3
+                            setters:
+                              - parameter: /map_red_node/Update_map
+                                param_type: bool
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1015
+                                    column: 3
+                              - parameter: /map_red_node/yaw_offset
+                                param_type: double
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1015
+                                    column: 3
+                              - parameter: /map_red_node/Delta_Latitude
+                                param_type: int
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1015
+                                    column: 3
+                              - parameter: /map_red_node/Delta_Longitude
+                                param_type: int
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1015
+                                    column: 3
+                            getters:
+                              - parameter: /map_red_node/Update_map
+                                param_type: bool
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1015
+                                    column: 3
+                              - parameter: /map_red_node/yaw_offset
+                                param_type: double
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1015
+                                    column: 3
+                              - parameter: /map_red_node/Delta_Latitude
+                                param_type: int
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1015
+                                    column: 3
+                              - parameter: /map_red_node/Delta_Longitude
+                                param_type: int
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1015
+                                    column: 3
+                              - parameter: /map_red_node/map_image
+                                default_value: "http://vcriis01.inesctec.pt/maps_dir/map_img.png"
+                                param_type: str
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1024
+                                    column: 3
+                              - parameter: /map_red_node/robot_model
+                                default_value: agrobv18
+                                param_type: str
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1025
+                                    column: 3
+                              - parameter: /map_red_node/map_location
+                                default_value: feup.png
+                                param_type: str
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1026
+                                    column: 3
+                              - parameter: /map_red_node/map_latitude_origin
+                                default_value: 41.177931
+                                param_type: double
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1030
+                                    column: 3
+                              - parameter: /map_red_node/map_longitude_origin
+                                default_value: -8.595265
+                                param_type: double
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1031
+                                    column: 3
+                              - parameter: /agrob_gnss_transform_node/datum
+                                param_type: null
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1034
+                                    column: 8
+                              - parameter: /agrob_gnss_transform_node/datum
+                                param_type: yaml
+                                traceability:
+                                    package: agrob_red_map
+                                    file: src/agrob_red_map_node.cpp
+                                    line: 1038
+                                    column: 9
+                                conditions:
+                                  - -
+                                        package: agrob_red_map
+                                        file: src/agrob_red_map_node.cpp
+                                        line: 1034
+                                        column: 3
+                                        statement: if
+                                        condition: '!nh.hasParam("/agrob_gnss_transform_node/datum")'
+                        /Agrob_path:
+                            node_type: Agrob_path/Agrob_path
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 4
+                                column: 3
+                            publishers:
+                              - topic: /plan_pub
+                                msg_type: nav_msgs/Path
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 155
+                                    column: 19
+                              - topic: /plan_local
+                                msg_type: nav_msgs/Path
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 156
+                                    column: 20
+                              - topic: /previous_local
+                                msg_type: nav_msgs/Path
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 157
+                                    column: 27
+                              - topic: /pos_gz
+                                msg_type: geometry_msgs/PoseStamped
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 160
+                                    column: 19
+                              - topic: /Agrob_path/cells_marker_array
+                                msg_type: visualization_msgs/MarkerArray
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 163
+                                    column: 20
+                              - topic: /local_maping_
+                                msg_type: nav_msgs/OccupancyGrid
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 166
+                                    column: 23
+                              - topic: /bezier
+                                msg_type: itrci_nav/ParametricPath
+                                queue_size: 1
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 169
+                                    column: 16
+                              - topic: /Path
+                                msg_type: itrci_nav/ParametricPathSet
+                                queue_size: 1
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 170
+                                    column: 20
+                              - topic: /pcl
+                                msg_type: sensor_msgs/PointCloud
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 173
+                                    column: 13
+                              - topic: /inflation_cloud
+                                msg_type: sensor_msgs/PointCloud2
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 174
+                                    column: 19
+                              - topic: /TrajectoryControlCommand
+                                msg_type: std_msgs/String
+                                queue_size: 1
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 177
+                                    column: 25
+                              - topic: /marker_debug
+                                msg_type: visualization_msgs/Marker
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 179
+                                    column: 22
+                              - topic: /debug_pose_array
+                                msg_type: geometry_msgs/PoseArray
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 181
+                                    column: 26
+                              - topic: /Agrob_path/parameter_descriptions
+                                msg_type: dynamic_reconfigure/ConfigDescription
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - topic: /Agrob_path/parameter_updates
+                                msg_type: dynamic_reconfigure/Config
+                                queue_size: 1
+                                latched: true
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                            subscribers:
+                              - topic: /map
+                                msg_type: nav_msgs/OccupancyGrid
+                                queue_size: 1
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 138
+                                    column: 14
+                              - topic: /initialpose
+                                msg_type: geometry_msgs/PoseWithCovarianceStamped
+                                queue_size: 1
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 141
+                                    column: 20
+                              - topic: /move_base_simple/goal
+                                msg_type: geometry_msgs/PoseStamped
+                                queue_size: 1
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 142
+                                    column: 20
+                              - topic: /scan
+                                msg_type: sensor_msgs/LaserScan
+                                queue_size: 1
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 144
+                                    column: 16
+                              - topic: /TrajectoryControlStatus
+                                msg_type: std_msgs/String
+                                queue_size: 1
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 147
+                                    column: 21
+                              - topic: /rectangle_map
+                                msg_type: geometry_msgs/PoseArray
+                                queue_size: 1
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 150
+                                    column: 29
+                              - topic: /obstacle_map
+                                msg_type: geometry_msgs/PointStamped
+                                queue_size: 1
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 152
+                                    column: 27
+                            servers:
+                              - service: /Agrob_path/set_parameters
+                                srv_type: dynamic_reconfigure/Reconfigure
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                            setters:
+                              - parameter: /Agrob_path/use_back_laser
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/penalize_heading_change
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/vegetation_wall
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/follow_vegetation_wall
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/configuration
+                                param_type: int
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/cubic_scale
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/laser_range
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/rob_vel
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/compaction_cost_scale
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/compaction_cost
+                                param_type: int
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/trees_dist
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                            getters:
+                              - parameter: /Agrob_path/global_frame_id
+                                default_value: "map"
+                                param_type: str
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1175
+                                    column: 3
+                              - parameter: /Agrob_path/base_frame_id
+                                default_value: "base_link"
+                                param_type: str
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1176
+                                    column: 3
+                              - parameter: /Agrob_path/penalize_heading_change
+                                default_value: false
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1178
+                                    column: 3
+                              - parameter: /Agrob_path/mark_end_cubes
+                                default_value: false
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1179
+                                    column: 3
+                              - parameter: /Agrob_path/use_localization
+                                default_value: true
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1180
+                                    column: 3
+                              - parameter: /Agrob_path/inflate_map_borders
+                                default_value: false
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1181
+                                    column: 3
+                              - parameter: /Agrob_path/allow_unknown
+                                default_value: true
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1182
+                                    column: 3
+                              - parameter: /Agrob_path/stop_at_exact_target
+                                default_value: false
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1183
+                                    column: 3
+                              - parameter: /Agrob_path/publish_entire_pcd
+                                default_value: false
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1184
+                                    column: 3
+                              - parameter: /Agrob_path/use_frontal_laser
+                                default_value: true
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1185
+                                    column: 3
+                              - parameter: /Agrob_path/inflate_obstacles
+                                default_value: true
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1187
+                                    column: 3
+                              - parameter: /Agrob_path/penalize_heading_change
+                                default_value: false
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1188
+                                    column: 3
+                              - parameter: /Agrob_path/DEBUG_altitude
+                                default_value: false
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1189
+                                    column: 3
+                              - parameter: /Agrob_path/navigate_entire_map
+                                default_value: false
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1195
+                                    column: 3
+                              - parameter: /Agrob_path/Inclination
+                                default_value: false
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1199
+                                    column: 3
+                              - parameter: /Agrob_path/COMPACTION
+                                default_value: false
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1202
+                                    column: 3
+                              - parameter: /Agrob_path/altitude_map
+                                default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/smooth_altitude_map_seixo_cut.png
+                                param_type: str
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1208
+                                    column: 3
+                              - parameter: /Agrob_path/gtiff_file
+                                default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/Map_PC2GD/DEM_seixo.gtiff
+                                param_type: str
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1210
+                                    column: 3
+                              - parameter: /Agrob_path/compatcion_map
+                                default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/Compaction/compactionSoil.png
+                                param_type: str
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1213
+                                    column: 3
+                              - parameter: /Agrob_path/compatcion_mapViz
+                                default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/Compaction/compactionMAP.png
+                                param_type: str
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1217
+                                    column: 3
+                              - parameter: /Agrob_path/inclMaps
+                                default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/mapasIncl/
+                                param_type: str
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1221
+                                    column: 3
+                              - parameter: /Agrob_path/inclFile
+                                default_value: inclination_WP.csv
+                                param_type: str
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1224
+                                    column: 3
+                              - parameter: /Agrob_path/vinhaOFF_maps
+                                default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/DockingMaps/vinha_
+                                param_type: str
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1227
+                                    column: 3
+                              - parameter: /Agrob_path/vineMaps
+                                default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/vineMaps/
+                                param_type: str
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1230
+                                    column: 3
+                              - parameter: /Agrob_path/distFile
+                                default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/distFile
+                                param_type: str
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1232
+                                    column: 3
+                              - parameter: /Agrob_path/localMaps
+                                default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/localsMaps/
+                                param_type: str
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1236
+                                    column: 3
+                              - parameter: /Agrob_path/robot_x_size
+                                default_value: 1.2
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1242
+                                    column: 3
+                              - parameter: /Agrob_path/robot_y_size
+                                default_value: 0.9
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1243
+                                    column: 3
+                              - parameter: /Agrob_path/robot_weight
+                                default_value: 100.0
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1244
+                                    column: 3
+                              - parameter: /Agrob_path/mass_center_x
+                                default_value: 0.1
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1245
+                                    column: 3
+                              - parameter: /Agrob_path/mass_center_y
+                                default_value: 0.0
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1246
+                                    column: 3
+                              - parameter: /Agrob_path/mass_center_z
+                                default_value: 0.5
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1247
+                                    column: 3
+                              - parameter: /Agrob_path/robot_x_axis
+                                default_value: 0.6
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1248
+                                    column: 3
+                              - parameter: /Agrob_path/robot_y_axis
+                                default_value: 0.45
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1249
+                                    column: 3
+                              - parameter: /Agrob_path/energy_cost
+                                default_value: false
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1253
+                                    column: 3
+                              - parameter: /Agrob_path/off_path
+                                default_value: false
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1254
+                                    column: 3
+                              - parameter: /Agrob_path/off_path1
+                                default_value: false
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1255
+                                    column: 3
+                              - parameter: /Agrob_path/use_back_laser
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/penalize_heading_change
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/vegetation_wall
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/follow_vegetation_wall
+                                param_type: bool
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/configuration
+                                param_type: int
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/cubic_scale
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/laser_range
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/rob_vel
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/compaction_cost_scale
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/compaction_cost
+                                param_type: int
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                              - parameter: /Agrob_path/trees_dist
+                                param_type: double
+                                traceability:
+                                    package: Agrob_path
+                                    file: src/Agrob_path.cpp
+                                    line: 1303
+                                    column: 3
+                    parameters:
+                        /map_server/frame_id:
+                            default_value: map
+                            param_type: str
+                            traceability:
+                                package: agrobv16_map_server
+                                file: launch/run_map_server_sogrape.launch
+                                line: 7
+                                column: 5
+                        /map_red_node/robot_model:
+                            default_value: agrobv17
+                            param_type: str
+                            traceability:
+                                package: agrob_red_map
+                                file: launch/agrob_red_map.launch
+                                line: 5
+                                column: 5
+                        /map_red_node/map_location:
+                            default_value: feup.png
+                            param_type: str
+                            traceability:
+                                package: agrob_red_map
+                                file: launch/agrob_red_map.launch
+                                line: 6
+                                column: 5
+                        /Agrob_path/robot_x_size:
+                            default_value: 0.75
+                            param_type: double
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 5
+                                column: 5
+                        /Agrob_path/robot_y_size:
+                            default_value: 0.5
+                            param_type: double
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 6
+                                column: 5
+                        /Agrob_path/robot_x_axis:
+                            default_value: 0.3
+                            param_type: double
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 7
+                                column: 5
+                        /Agrob_path/robot_y_axis:
+                            default_value: 0.2
+                            param_type: double
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 8
+                                column: 5
+                        /Agrob_path/mass_center_x:
+                            default_value: 0.1
+                            param_type: double
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 10
+                                column: 5
+                        /Agrob_path/mass_center_y:
+                            default_value: 0.0
+                            param_type: double
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 11
+                                column: 5
+                        /Agrob_path/mass_center_z:
+                            default_value: 0.4
+                            param_type: double
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 12
+                                column: 5
+                        /Agrob_path/inflate_obstacles:
+                            default_value: true
+                            param_type: bool
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 14
+                                column: 5
+                        /Agrob_path/Inclination:
+                            default_value: false
+                            param_type: bool
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 15
+                                column: 5
+                        /Agrob_path/use_localization:
+                            default_value: true
+                            param_type: bool
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 16
+                                column: 5
+                        /Agrob_path/off_path:
+                            default_value: false
+                            param_type: bool
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 17
+                                column: 5
+                        /Agrob_path/altitude_map:
+                            # default_value: $(find Agrob_path)/Data/smooth_altitude_map_seixo.png
+                            default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/smooth_altitude_map_seixo.png
+                            param_type: str
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 21
+                                column: 5
+                        /Agrob_path/gtiff_file:
+                            # default_value: $(find Agrob_path)/launch/DEM_seixo.gtiff
+                            default_value: /home/andre/ros/ws/src/agrob/Agrob_path/launch/DEM_seixo.gtiff
+                            param_type: str
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 22
+                                column: 5
+                        /Agrob_path/vinhaOFF_maps:
+                            # default_value: $(find Agrob_path)/Data/vinhaOFF/
+                            default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/vinhaOFF/
+                            param_type: str
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 24
+                                column: 5
+                        /Agrob_path/vineMaps:
+                            # default_value: $(find Agrob_path)/Data/vineMaps/
+                            default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/vineMaps/
+                            param_type: str
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 25
+                                column: 5
+                        /Agrob_path/inclMaps:
+                            # default_value: $(find Agrob_path)/Data/mapasIncl/
+                            default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/mapasIncl/
+                            param_type: str
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 26
+                                column: 5
+                        /Agrob_path/localMaps:
+                            # default_value: $(find Agrob_path)/Data/localsMaps/
+                            default_value: /home/andre/ros/ws/src/agrob/Agrob_path/Data/localsMaps/
+                            param_type: str
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 27
+                                column: 5
+                        /Agrob_path/inclFile:
+                            default_value: inclination_WP_CM_article.csv
+                            param_type: str
+                            traceability:
+                                package: agrob_path_planning_stack
+                                file: launch/Agrob_PP.launch
+                                line: 29
+                                column: 5

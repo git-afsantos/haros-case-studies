@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/342338554.svg)](https://zenodo.org/badge/latestdoi/342338554)
+
 # HAROS Case Studies
 
 This repository holds a collection of case studies of the [HAROS framework](https://github.com/git-afsantos/haros/).
